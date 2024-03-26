@@ -1,0 +1,16 @@
+{
+    "hooks": [
+        {
+            "name": "app.payment.form.processor.paydock",
+            "script": "./cartridge/scripts/hooks/payment/processor/paydockCharge.js"
+        },
+        {
+          "name": "app.payment.processor.paydock",
+          "script": "./cartridge/scripts/hooks/payment/processor/paydockCharge.js"
+        },
+        {
+            "name": "app.fraud.detection",
+            "script": "./cartridge/scripts/hooks/payment/processor/paydockCharge.js"
+        }
+    ]
+}

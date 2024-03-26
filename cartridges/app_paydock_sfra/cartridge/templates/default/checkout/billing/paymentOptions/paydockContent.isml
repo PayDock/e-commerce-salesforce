@@ -1,0 +1,61 @@
+<style>iframe {border: 0; width: 100%; height: 200px;}</style>
+
+<div class="tab-pane active paydock-content" id="paydock-content" role="tabpanel">
+    <fieldset class="payment-form-fields">
+        <input type="hidden" class="form-control"
+            name="${pdict.forms.billingForm.paymentMethod.htmlName}"
+            value="PAYDOCK"
+        >
+
+        <div id="paydocWidget"
+            data-gateway-id="${pdict.paydockGatewayID}" 
+            data-public-key="${pdict.paydockPublicAPIKey}"
+            data-dwfrm-name="${pdict.forms.billingForm.paydockToken.htmlName}"
+            <isif condition="${typeof pdict.paydockReferenceId !== 'undefined' && pdict.paydockReferenceId}">
+                data-reference-id="${paydockReferenceId}"
+            </isif>
+            <isif condition="${typeof pdict.paydockWidgetStyles !== 'undefined' && pdict.paydockWidgetStyles}">
+                data-styles="<isprint value="${JSON.stringify(pdict.paydockWidgetStyles)}" encoding="on" />"
+            </isif>
+            submit-button="Submit Card"
+        ></div>
+
+        <input name="${pdict.forms.billingForm.paydockToken.htmlName}" id="payment_source_token" type="hidden">
+    </fieldset>
+</div>
+
+<script src="https://widget.paydock.com/sdk/latest/widget.umd.min.js" ></script>
+
+<script>
+    var paydockPublicKey = document.getElementById("paydocWidget").dataset.publicKey;
+    var paydockGatewayId = document.getElementById("paydocWidget").dataset.gatewayId;
+    var paydockTokenName = document.getElementById("paydocWidget").dataset.dwfrmName;
+    var paydockReferenceId = document.getElementById("paydocWidget").dataset.referenceId;
+    var paydockWidgetStyles = document.getElementById("paydocWidget").dataset.styles;
+    var paydockTokenNameSelector = paydockTokenName ? 'input[name="' + paydockTokenName + '"]' : null;
+    var paydockTokenNameElement = paydockTokenNameSelector ? document.querySelector(paydockTokenNameSelector) : null;
+
+    if (paydockPublicKey && paydockGatewayId && paydockTokenNameElement) {
+        var widget = new paydock.HtmlWidget('#paydocWidget', paydockPublicKey, paydockGatewayId);
+        widget.onFinishInsert(paydockTokenNameSelector, 'payment_source');
+
+        if (paydockReferenceId) {
+            widget.setRefId(paydockReferenceId);
+        }
+
+        if (paydockWidgetStyles) {
+            try {
+                paydockWidgetStyles = JSON.parse(paydockWidgetStyles);
+                widget.setStyles(paydockWidgetStyles);   
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+
+        widget.setHiddenElements(['submit_button']);
+
+        widget.load();
+    }
+</script>
+
