@@ -1,0 +1,19 @@
+<isscript>
+    var isActive = pdict.selectedPaydockPaymentInstrument ?
+        pdict.selectedPaydockPaymentInstrument.paymentMethod === 'PAYDOCK_CHECKOUT_BUTTON_AFTERPAY' :
+        false;
+</isscript>
+
+<li class="nav-item" data-method-id="${paymentOption.ID}">
+    <a class="nav-link paydock-checkout-button-afterpay-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#paydock-checkout-button-afterpay-content" role="tab">
+        <label>
+            ${paymentOption.name}
+        </label>
+    </a>
+</li>
+
+<div class="credit-card-selection-new">
+    <div class="tab-content">
+        <isinclude template="checkout/billing/paymentOptions/paydockCheckoutButtonAfterpayContent" />
+    </div>
+</div>

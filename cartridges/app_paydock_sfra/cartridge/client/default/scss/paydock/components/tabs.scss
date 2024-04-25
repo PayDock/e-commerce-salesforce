@@ -1,0 +1,59 @@
+@import "~base/variables";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/mixins/breakpoints";
+
+.form-nav .nav-tabs .nav-link {
+    color: $grey8;
+}
+
+.form-nav .nav-tabs .nav-link.active,
+.form-nav .nav-tabs .nav-link.active:focus,
+.form-nav .nav-tabs .nav-link.active:hover {
+    background-color: $white;
+    color: $grey8;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+}
+
+.payment-options {
+    flex-direction: column;
+}
+
+.payment-options .nav-item {
+    text-align: left;
+}
+
+.payment-options .nav-item .nav-link {
+    border: 1px solid $black;
+    margin: .625rem 0;
+    color: $black !important;
+}
+
+.payment-options .nav-item .nav-link label {
+    margin-bottom: 0;
+    font-size: 1.438rem;
+    cursor: inherit;
+}
+
+.payment-options .nav-item .nav-link .payment-radio {
+    margin-right: .938rem;
+}
+
+.payment-options .tab-pane {
+    border: 1px solid $black;
+    padding: 0.5rem 1rem;
+}
+
+.payment-options .tab-pane.active {
+    border-top: none;
+}
+
+@include media-breakpoint-up(lg) {
+    .form-nav .nav-item > .nav-link {
+        color: $grey8;
+    }
+}

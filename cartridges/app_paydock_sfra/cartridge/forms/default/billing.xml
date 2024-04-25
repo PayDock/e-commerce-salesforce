@@ -12,6 +12,10 @@
 
     <field formid="paydockToken" type="string" mandatory="false" />
 
+    <field formid="browserDetails" type="string" mandatory="false" />
+
+    <field formid="savePaydockCard" label="label.save.card.paydock" binding="savePaydockCard" type="boolean" mandatory="false" checked="true" />
+
     <include formid="creditCardFields" name="creditCard"/>
 
     <field formid="subscribe" type="boolean" checked="false" default-value="false" mandatory="false" />

@@ -114,6 +114,9 @@
     "last 2 versions",
     "ie >= 10"
   ],
+  "paths": {
+    "base": "cartridges/app_storefront_base"
+  },
   "packageName": "app_storefront_base",
   "babel": {
     "presets": [

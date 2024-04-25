@@ -84,7 +84,7 @@ function capture(args) {
     // search and process
     OrderMgr.processOrders(
         capturePaydockOrderCharges,
-        'status != {0} AND status != {1} AND paymentStatus != {2} AND confirmationStatus = {3} AND creationDate >= {4} AND custom.paydockRefunded != True',
+        'status != {0} AND status != {1} AND paymentStatus != {2} AND confirmationStatus = {3} AND creationDate >= {4} AND custom.paydockCaptured != True AND custom.paydockRefunded != True',
         Order.ORDER_STATUS_CANCELLED,
         Order.ORDER_STATUS_FAILED,
         Order.PAYMENT_STATUS_PAID,
