@@ -1,0 +1,8 @@
+<isscript>
+    var paydockCheckoutHelper = require('*/cartridge/scripts/paydock/helpers/checkoutHelper');
+
+    if (paydockCheckoutHelper.isPaydockPaymentMethodsEnabled()) {
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('https://widget.paydock.com/sdk/latest/widget.umd.min.js');
+    }
+</isscript>

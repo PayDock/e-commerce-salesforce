@@ -323,42 +323,5 @@ module.exports = {
             var methodID = $(this).data('method-id');
             $('.payment-information').data('payment-method-id', methodID);
         });
-    },
-
-    paydockWidgetFormSubmit: function () {
-        $('.submit-payment').on('click', function(e) {
-            if ($('.payment-information').data('payment-method-id') === 'PAYDOCK') {
-                var paydockTokenName = document.getElementById("paydocWidget").dataset.dwfrmName;
-                var paydockTokenNameSelector = paydockTokenName ? 'input[name="' + paydockTokenName + '"]' : null;
-
-                if (paydockTokenNameSelector && $(paydockTokenNameSelector).length === 1 && !$(paydockTokenNameSelector).val()) {
-                    e.preventDefault();
-                    widget.trigger('submit_form');
-                    return false;
-                }
-            }
-        });
-    },
-
-    paydockWidgetPaymentSubmit: function() {
-        if (typeof widget !== 'undefined' && widget) {
-            widget.on('finish', function (data) {
-                $('.submit-payment').trigger('click');
-                widget.reload();
-            });
-        }
-    },
-
-    paydockWidgetReload: function() {
-        if (typeof widget !== 'undefined' && widget) {
-            widget.on('afterLoad', function(data) {
-                var paydockTokenName = document.getElementById("paydocWidget").dataset.dwfrmName;
-                var paydockTokenNameSelector = paydockTokenName ? 'input[name="' + paydockTokenName + '"]' : null;
-
-                if (paydockTokenNameSelector && $(paydockTokenNameSelector).length === 1) {
-                    $(paydockTokenNameSelector).val('');
-                }
-            });
-        }
     }
 };

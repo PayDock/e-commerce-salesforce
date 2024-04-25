@@ -1,10 +1,19 @@
+<isscript>
+    var isActive = !pdict.selectedPaydockPaymentInstrument ?
+        paymentOption.ID === 'CREDIT_CARD' :
+        false;
+</isscript>
+
 <li class="nav-item" data-method-id="${paymentOption.ID}">
     <a class="nav-link credit-card-tab" data-toggle="tab" href="#credit-card-content" role="tab">
-        <img class="credit-card-option"
-                src="${URLUtils.staticURL('/images/credit.png')}"
-                height="32"
-                alt="${paymentOption.name}"
-                title="${paymentOption.name}"
-        >
+        <label>
+            ${paymentOption.name}
+        </label>
     </a>
 </li>
+
+<div class="credit-card-selection-new">
+    <div class="tab-content">
+        <isinclude template="checkout/billing/paymentOptions/creditCardContent" />
+    </div>
+</div>
