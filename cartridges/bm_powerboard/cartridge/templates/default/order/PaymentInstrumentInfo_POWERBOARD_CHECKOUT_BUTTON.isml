@@ -1,0 +1,5 @@
+<!--- TEMPLATENAME: PaymentInstrumentInfo_POWERBOARD_CHECKOUT_BUTTON.isml --->
+
+<iscontent type="text/html" charset="UTF-8" compact="true">
+
+<isinclude template="powerboard/chargeOperations" />

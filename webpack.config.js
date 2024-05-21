@@ -25,7 +25,7 @@ module.exports = [{
     name: 'js',
     entry: jsFiles,
     output: {
-        path: path.resolve('./cartridges/app_paydock_sfra/cartridge/static'),
+        path: path.resolve('./cartridges/app_powerboard_sfra/cartridge/static'),
         filename: '[name].js'
     },
     module: {
@@ -49,7 +49,7 @@ module.exports = [{
     name: 'scss',
     entry: scssFiles,
     output: {
-        path: path.resolve('./cartridges/app_paydock_sfra/cartridge/static'),
+        path: path.resolve('./cartridges/app_powerboard_sfra/cartridge/static'),
         filename: '[name].css'
     },
     module: {

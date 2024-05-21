@@ -1,0 +1,28 @@
+<isscript>
+    var isActive = pdict.selectedPowerboardPaymentInstrument ?
+        pdict.selectedPowerboardPaymentInstrument.paymentMethod === 'POWERBOARD_WALLET_BUTTONS_AFTERPAY' :
+        false;
+</isscript>
+
+<div class="tab-pane ${isActive ? 'active' : ''} powerboard-wallet-buttons-afterpay-content" id="powerboard-wallet-buttons-afterpay-content" content-id="${paymentOption.ID}" role="tabpanel">
+    <div style="text-align: center; margin-bottom: 12px;">
+        <img class="powerboard-option"
+            src="${URLUtils.staticURL('/images/powerboard.png')}"
+            width="260px"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
+    </div>
+
+    <fieldset class="payment-form-fields">
+        <!--- payment method is PowerBoard Wallet Buttons Afterpay --->
+        <input type="hidden" class="form-control"
+            name="${pdict.forms.billingForm.paymentMethod.htmlName}"
+            value="POWERBOARD_WALLET_BUTTONS_AFTERPAY"
+        >
+    </fieldset>
+
+    <isif condition="${paymentOption.description}">
+        <p>${paymentOption.description}</p>
+    </isif>
+</div>

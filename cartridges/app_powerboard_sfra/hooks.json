@@ -1,0 +1,32 @@
+{
+    "hooks": [
+        {
+            "name": "app.payment.form.processor.powerboard",
+            "script": "./cartridge/scripts/hooks/payment/processor/powerboardCharge.js"
+        },
+        {
+          "name": "app.payment.processor.powerboard",
+          "script": "./cartridge/scripts/hooks/payment/processor/powerboardCharge.js"
+        },
+        {
+            "name": "app.payment.form.processor.powerboard_wallet_buttons",
+            "script": "./cartridge/scripts/hooks/payment/processor/powerboardWalletButtonsCharge.js"
+        },
+        {
+            "name": "app.payment.processor.powerboard_wallet_buttons",
+            "script": "./cartridge/scripts/hooks/payment/processor/powerboardWalletButtonsCharge.js"
+        },
+        {
+            "name": "app.payment.form.processor.powerboard_checkout_button",
+            "script": "./cartridge/scripts/hooks/payment/processor/powerboardCheckoutButtonCharge.js"
+        },
+        {
+            "name": "app.payment.processor.powerboard_checkout_button",
+            "script": "./cartridge/scripts/hooks/payment/processor/powerboardCheckoutButtonCharge.js"
+        },
+        {
+            "name": "app.fraud.detection",
+            "script": "./cartridge/scripts/hooks/payment/processor/powerboardCharge.js"
+        }
+    ]
+}

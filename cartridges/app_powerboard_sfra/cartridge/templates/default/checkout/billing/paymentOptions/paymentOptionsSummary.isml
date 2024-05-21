@@ -1,0 +1,19 @@
+<div class="payment-details" data-three-ds-type="${pdict.powerboard3DSType}" data-three-ds-flow="${pdict.powerboard3DSFlow}">
+    <isloop items="${pdict.order.billing.payment.selectedPaymentInstruments}" var="payment">
+        <isif condition="${payment.paymentMethod === 'POWERBOARD'}">
+            <isinclude template="checkout/billing/paymentOptions/powerboardCardSummary" />
+        </isif>
+        <isif condition="${['POWERBOARD_WALLET_BUTTONS_APPLE_PAY', 'POWERBOARD_WALLET_BUTTONS_GOOGLE_PAY', 'POWERBOARD_WALLET_BUTTONS_PAYPAL', 'POWERBOARD_WALLET_BUTTONS_AFTERPAY'].indexOf(payment.paymentMethod) !== -1}">
+            <isinclude template="checkout/billing/paymentOptions/powerboardWalletButtonsSummary" />
+        </isif>
+        <isif condition="${payment.paymentMethod === 'POWERBOARD_CHECKOUT_BUTTON_AFTERPAY'}">
+            <isinclude template="checkout/billing/paymentOptions/powerboardCheckoutButtonAfterpaySummary" />
+        </isif>
+         <isif condition="${payment.paymentMethod === 'POWERBOARD_CHECKOUT_BUTTON_ZIPMONEY'}">
+            <isinclude template="checkout/billing/paymentOptions/powerboardCheckoutButtonZipMoneySummary" />
+        </isif>
+        <isif condition="${payment.paymentMethod === 'CREDIT_CARD'}">
+            <isinclude template="checkout/billing/paymentOptions/creditCardSummary" />
+        </isif>
+    </isloop>
+</div>

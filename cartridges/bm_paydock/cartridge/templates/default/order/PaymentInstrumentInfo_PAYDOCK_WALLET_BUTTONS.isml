@@ -1,5 +1,0 @@
-<!--- TEMPLATENAME: PaymentInstrumentInfo_PAYDOCK_WALLET_BUTTONS.isml --->
-
-<iscontent type="text/html" charset="UTF-8" compact="true">
-
-<isinclude template="paydock/chargeOperations" />

@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="CustomerPaymentInstrument">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="powerboardCustomerID">
+                <display-name xml:lang="x-default">PowerBoard Customer ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardVaultToken">
+                <display-name xml:lang="x-default">PowerBoard Vault Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCardDetails">
+                <display-name xml:lang="x-default">PowerBoard Card Details</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+
+    <type-extension type-id="Basket">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="powerboardChargeID">
+                <display-name xml:lang="x-default">PowerBoard Charge ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardFraudID">
+                    <display-name xml:lang="x-default">PowerBoard Fraud ID</display-name>
+                    <type>string</type>
+                    <mandatory-flag>false</mandatory-flag>
+                    <externally-managed-flag>false</externally-managed-flag>
+                    <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+
+    <type-extension type-id="Order">
+        <custom-attribute-definitions>
+             <attribute-definition attribute-id="powerboardCaptured">
+                <display-name xml:lang="x-default">PowerBoard Captured</display-name>
+                <description xml:lang="x-default">All PowerBoard charges captured</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardChargeID">
+                <display-name xml:lang="x-default">PowerBoard Charge ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardPaymentMethod">
+                <display-name xml:lang="x-default">PowerBoard Payment Method</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardRefunded">
+                <display-name xml:lang="x-default">PowerBoard Refunded</display-name>
+                <description xml:lang="x-default">All PowerBoard charges refunded</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardFraudID">
+                <display-name xml:lang="x-default">PowerBoard Fraud ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="PowerBoard">
+                <display-name xml:lang="x-default">PowerBoard</display-name>
+                <attribute attribute-id="powerboardChargeID"/>
+                <attribute attribute-id="powerboardCaptured"/>
+                <attribute attribute-id="powerboardRefunded"/>
+                <attribute attribute-id="powerboardFraudID"/>
+                <attribute attribute-id="powerboardPaymentMethod"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+
+    <type-extension type-id="OrderPaymentInstrument">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="powerboard3DSToken">
+                <display-name xml:lang="x-default">PowerBoard 3DS Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCardDetails">
+                <display-name xml:lang="x-default">PowerBoard Card Details</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCapturedAmount">
+                <display-name xml:lang="x-default">PowerBoard Captured Amount</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardChargeID">
+                <display-name xml:lang="x-default">PowerBoard Charge ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCharge3DSToken">
+                <display-name xml:lang="x-default">PowerBoard Charge 3DS Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardChargeStatus">
+                <display-name xml:lang="x-default">PowerBoard Charge Status</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCustomerID">
+                <display-name xml:lang="x-default">PowerBoard Customer ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardGatewayType">
+                <display-name xml:lang="x-default">PowerBoard Gateway Type</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardRefundedAmount">
+                <display-name xml:lang="x-default">PowerBoard Refunded Amount</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardSaveCard">
+                <display-name xml:lang="x-default">PowerBoard Save Card</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardToken">
+                <display-name xml:lang="x-default">PowerBoard Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardVaultToken">
+                <display-name xml:lang="x-default">PowerBoard Vault Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardVaultType">
+                <display-name xml:lang="x-default">PowerBoard Vault Type</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardFraudID">
+                <display-name xml:lang="x-default">PowerBoard Fraud ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardFraudStatus">
+                <display-name xml:lang="x-default">PowerBoard Fraud Status</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+
+    <type-extension type-id="PaymentTransaction">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="powerboardCaptureAmount">
+                <display-name xml:lang="x-default">PowerBoard Capture Amount</display-name>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Custom">
+                <display-name xml:lang="x-default">Custom</display-name>
+                <attribute attribute-id="eFundsTransactionHistory"/>
+                <attribute attribute-id="powerboardCaptureAmount"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+
+    <type-extension type-id="SitePreferences">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="powerboardAPIToken">
+                <display-name xml:lang="x-default">API access token</display-name>
+                <description xml:lang="x-default">Enter the API Access Token for authentication.  This key is used for authentication to ensure secure communication with the payment gateway. It needs to be filled in only if API Public Key &amp; API Secret Key is not entered.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardBMChargeOperationsAll">
+                <display-name xml:lang="x-default">All Charge Operations</display-name>
+                <description xml:lang="x-default">Charge Operations Display All</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCardScheme">
+                <display-name xml:lang="x-default">Supported card schemes</display-name>
+                <type>set-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardChargeCapture">
+                <display-name xml:lang="x-default">Direct charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardConnectionType">
+                <display-name xml:lang="x-default">Connection Type</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">With Key</display>
+                        <value>powerboardKey</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">With Token</display>
+                        <value>powerboardToken</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardEnableSaveCard">
+                <display-name xml:lang="x-default">Save card</display-name>
+                <description xml:lang="x-default">Offer your customer to save the card permanently at PowerBoard.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardFraudServiceID">
+                <display-name xml:lang="x-default">Fraud service ID</display-name>
+                <description xml:lang="x-default">Required for “Standalone Fraud” and “In-built Fraud”</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardFraudType">
+                <display-name xml:lang="x-default">Fraud</display-name>
+                <description xml:lang="x-default">“In-built Fraud” is not supported when “standalone 3DS” is selected. “Standalone Fraud” is not supported when “In-built 3DS with OTT” is selected.</description>
+                <type>enum-of-string</type>
+                <mandatory-flag>true</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Disabled</display>
+                        <value>disabledFraud</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Standalone Fraud</display>
+                        <value>standaloneFraud</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">In-built Fraud</display>
+                        <value>inbuiltFraud</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardGatewayID">
+                <display-name xml:lang="x-default">Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardPrivateAPIKey">
+                <display-name xml:lang="x-default">Secret key</display-name>
+                <description xml:lang="x-default">Enter the API Secret key for authentication. This key is used for authentication to ensure secure communication with the payment gateway.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardPublicAPIKey">
+                <display-name xml:lang="x-default">Public key</display-name>
+                <description xml:lang="x-default">Enter the API Public key for authentication. This key is used for authentication to ensure secure communication with the payment gateway.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardRawErrorMessaging">
+                <display-name xml:lang="x-default">Raw Error Messaging</display-name>
+                <description xml:lang="x-default">Raw Error Messaging or User Friendly one at Checkout</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardSaveCardMethod">
+                <display-name xml:lang="x-default">Save card option</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>true</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Vault Token</display>
+                        <value>vaultToken</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Customer with Gateway ID</display>
+                        <value>customerWithGatewayID</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Customer without Gateway ID</display>
+                        <value>customerWithoutGatewayID</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonAfterpayChargeCapture">
+                <display-name xml:lang="x-default">Afterpay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonAfterpayGatewayID">
+                <display-name xml:lang="x-default">Afterpay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonZipMoneyChargeCapture">
+                <display-name xml:lang="x-default">Zip Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonZipMoneyGatewayID">
+                <display-name xml:lang="x-default">Zip Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsAfterpayChargeCapture">
+                <display-name xml:lang="x-default">Afterpay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsAfterpayGatewayID">
+                <display-name xml:lang="x-default">Afterpay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsAfterpayFraud">
+                <display-name xml:lang="x-default">Afterpay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsAfterpayFraudServiceID">
+                <display-name xml:lang="x-default">Afterpay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonAfterpayFraud">
+                <display-name xml:lang="x-default">Afterpay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonAfterpayFraudServiceID">
+                <display-name xml:lang="x-default">Afterpay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonZipMoneyFraud">
+                <display-name xml:lang="x-default">ZipMoney Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardCheckoutButtonZipMoneyFraudServiceID">
+                <display-name xml:lang="x-default">ZipMoney fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsApplePayChargeCapture">
+                <display-name xml:lang="x-default">Apple Pay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsApplePayGatewayID">
+                <display-name xml:lang="x-default">Apple Pay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsApplePayFraud">
+                <display-name xml:lang="x-default">Apple Pay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsApplePayFraudServiceID">
+                <display-name xml:lang="x-default">Apple Pay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsGooglePayChargeCapture">
+                <display-name xml:lang="x-default">Google Pay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsGooglePayGatewayID">
+                <display-name xml:lang="x-default">Google Pay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsGooglePayFraud">
+                <display-name xml:lang="x-default">Google Pay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsGooglePayFraudServiceID">
+                <display-name xml:lang="x-default">Google Pay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsPayPalChargeCapture">
+                <display-name xml:lang="x-default">PayPal Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsPayPalGatewayID">
+                <display-name xml:lang="x-default">PayPal Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsPayPalFraud">
+                <display-name xml:lang="x-default">PayPal Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsPayPalFraudServiceID">
+                <display-name xml:lang="x-default">PayPal fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsPayPalPayLater">
+                <display-name xml:lang="x-default">PayPal Pay Later</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWidgetStyles">
+                <display-name xml:lang="x-default">Widget Styles</display-name>
+                <description xml:lang="x-default">Widget Styles JSON</description>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWidgetToken">
+                <display-name xml:lang="x-default">Widget access token</display-name>
+                <description xml:lang="x-default">Enter the Widget Access Token for authentication.  This key is used for authentication to ensure secure communication with the payment gateway. It needs to be filled in only if API Public Key &amp; API Secret Key is not entered.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboard3DSFlow">
+                <display-name xml:lang="x-default">3DS flow</display-name>
+                <description xml:lang="x-default">When 3DS is enabled, select which 3DS flow to be supported. For Standalone 3DS, charge creation is supported “with vault”. For In-built 3DS, charge creation is supported “with vault” and “with OTT”. For “In-built 3DS with OTT”, save card method is not supported.</description>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">With Vault</display>
+                        <value>vault</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">With OTT</display>
+                        <value>ott</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboard3DSServiceID">
+                <display-name xml:lang="x-default">3DS service ID</display-name>
+                <description xml:lang="x-default">Only required when standalone 3DS is enabled.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboard3DSType">
+                <display-name xml:lang="x-default">3DS</display-name>
+                <description xml:lang="x-default">“Standalone 3DS” is not supported with “In-built Fraud”.</description>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Disable</display>
+                        <value>disabled3DS</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">In-built 3DS</display>
+                        <value>inbuilt3DS</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Standalobe 3DS</display>
+                        <value>standalone3DS</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="PowerBoard">
+                <display-name xml:lang="x-default">PowerBoard Access &amp; Cards</display-name>
+                <attribute attribute-id="powerboardPublicAPIKey"/>
+                <attribute attribute-id="powerboardPrivateAPIKey"/>
+                <attribute attribute-id="powerboardAPIToken"/>
+                <attribute attribute-id="powerboardWidgetToken"/>
+                <attribute attribute-id="powerboardCardScheme"/>
+                <attribute attribute-id="powerboardGatewayID"/>
+                <attribute attribute-id="powerboard3DSType"/>
+                <attribute attribute-id="powerboard3DSServiceID"/>
+                <attribute attribute-id="powerboard3DSFlow"/>
+                <attribute attribute-id="powerboardFraudType"/>
+                <attribute attribute-id="powerboardFraudServiceID"/>
+                <attribute attribute-id="powerboardChargeCapture"/>
+                <attribute attribute-id="powerboardEnableSaveCard"/>
+                <attribute attribute-id="powerboardSaveCardMethod"/>
+                <attribute attribute-id="powerboardConnectionType"/>
+                <attribute attribute-id="powerboardRawErrorMessaging"/>
+                <attribute attribute-id="powerboardWidgetStyles"/>
+                <attribute attribute-id="powerboardBMChargeOperationsAll"/>
+            </attribute-group>
+            <attribute-group group-id="PowerBoardWalletButtons">
+                <display-name xml:lang="x-default">PowerBoard Wallets</display-name>
+                <attribute attribute-id="powerboardWalletButtonsApplePayGatewayID"/>
+                <attribute attribute-id="powerboardWalletButtonsApplePayChargeCapture"/>
+                <attribute attribute-id="powerboardWalletButtonsApplePayFraud"/>
+                <attribute attribute-id="powerboardWalletButtonsApplePayFraudServiceID"/>
+                <attribute attribute-id="powerboardWalletButtonsGooglePayGatewayID"/>
+                <attribute attribute-id="powerboardWalletButtonsGooglePayChargeCapture"/>
+                <attribute attribute-id="powerboardWalletButtonsGooglePayFraud"/>
+                <attribute attribute-id="powerboardWalletButtonsGooglePayFraudServiceID"/>
+                <attribute attribute-id="powerboardWalletButtonsPayPalGatewayID"/>
+                <attribute attribute-id="powerboardWalletButtonsPayPalChargeCapture"/>
+                <attribute attribute-id="powerboardWalletButtonsPayPalFraud"/>
+                <attribute attribute-id="powerboardWalletButtonsPayPalFraudServiceID"/>
+                <attribute attribute-id="powerboardWalletButtonsPayPalPayLater"/>
+            </attribute-group>
+            <attribute-group group-id="PowerBoardCheckoutButtons">
+                <display-name xml:lang="x-default">PowerBoard Alternative Payment Methods</display-name>
+                <attribute attribute-id="powerboardCheckoutButtonZipMoneyGatewayID"/>
+                <attribute attribute-id="powerboardCheckoutButtonZipMoneyChargeCapture"/>
+                <attribute attribute-id="powerboardCheckoutButtonZipMoneyFraud"/>
+                <attribute attribute-id="powerboardCheckoutButtonZipMoneyFraudServiceID"/>
+                <attribute attribute-id="powerboardCheckoutButtonAfterpayGatewayID"/>
+                <attribute attribute-id="powerboardCheckoutButtonAfterpayChargeCapture"/>
+                <attribute attribute-id="powerboardCheckoutButtonAfterpayFraud"/>
+                <attribute attribute-id="powerboardCheckoutButtonAfterpayFraudServiceID"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+</metadata>

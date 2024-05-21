@@ -1,0 +1,17 @@
+<isif condition="${!pdict.currentStage}">
+    <div class="credit-card-type">
+        <span>${payment.accountType}</span>
+    </div>
+    <div class="credit-card-holder">
+        ${payment.owner}
+    </div>
+<iselse/>
+    <div
+        id="powerboardWalletButtonsWidget${payment.gatewayType}"
+        class="powerboardWalletButtonsWidget mt-2 mb-4"
+        data-wallet-buttons-token="${payment.token}"
+        data-wallet-buttons-amount-label="${payment.amountLabel}"
+        data-wallet-buttons-country="${payment.country}"
+        data-wallet-buttons-pay-later="${payment.payLater}"
+    ></div>
+</isif>

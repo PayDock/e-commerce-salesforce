@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<extensions xmlns="http://www.demandware.com/xml/bmmodules/2007-12-11" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.demandware.com/xml/bmmodules/2007-12-11 bmext.xsd">
+	<!-- =============================================================== -->
+	<!-- ==                                                           == -->
+	<!-- ==  SITE   MENU   EXTENSIONS                                 == -->
+	<!-- ==                                                           == -->
+	<!-- =============================================================== -->
+	
+	<menuitem id="powerboardSite" position="9000" site="true">
+		<name xml:lang="x-default">PowerBoard</name>
+		<short_description xml:lang="x-default">PowerBoard</short_description>
+		<description xml:lang="x-default">PowerBoard</description>
+		<icon>icons/channel_ico.gif</icon>
+	</menuitem>
+	
+	<menuaction id="powerboardPayments" menupath="powerboardSite" position="9002" site="true">
+		<name xml:lang="x-default">PowerBoard Payments</name>
+		<short_description xml:lang="x-default">
+			PowerBoard Payments
+		</short_description>
+		<description xml:lang="x-default">
+			PowerBoard Payment Operations
+		</description>
+		<exec pipeline="PowerBoardBM" node="Charges" />
+		<sub-pipelines>
+			<pipeline name="PowerBoardBM-Charges" />
+			<pipeline name="PowerBoardBM-HandleCharge" />
+		</sub-pipelines>
+		<parameters>
+		</parameters>
+		<permissions>
+		</permissions>
+		<icon>icons/sitespaymentmethods_ico.gif</icon>
+	</menuaction>
+
+</extensions>

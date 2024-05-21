@@ -1,0 +1,26 @@
+<isloop items="${pdict.order.billing.payment.applicablePaymentMethods}" var="paymentOption">
+    <isif condition="${paymentOption.ID === 'POWERBOARD'}">
+        <isinclude template="checkout/billing/paymentOptions/powerboardTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'POWERBOARD_WALLET_BUTTONS_APPLE_PAY'}">
+        <isinclude template="checkout/billing/paymentOptions/powerboardWalletButtonsApplePayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'POWERBOARD_WALLET_BUTTONS_GOOGLE_PAY'}">
+        <isinclude template="checkout/billing/paymentOptions/powerboardWalletButtonsGooglePayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'POWERBOARD_WALLET_BUTTONS_PAYPAL'}">
+        <isinclude template="checkout/billing/paymentOptions/powerboardWalletButtonsPayPalTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'POWERBOARD_WALLET_BUTTONS_AFTERPAY'}">
+        <isinclude template="checkout/billing/paymentOptions/powerboardWalletButtonsAfterpayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'POWERBOARD_CHECKOUT_BUTTON_AFTERPAY'}">
+        <isinclude template="checkout/billing/paymentOptions/powerboardCheckoutButtonAfterpayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'POWERBOARD_CHECKOUT_BUTTON_ZIPMONEY'}">
+        <isinclude template="checkout/billing/paymentOptions/powerboardCheckoutButtonZipMoneyTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'CREDIT_CARD'}">
+        <isinclude template="checkout/billing/paymentOptions/creditCardTab" />
+    </isif>
+</isloop>

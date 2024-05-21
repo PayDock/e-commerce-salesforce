@@ -1,0 +1,85 @@
+<iscontent type="text/html" charset="UTF-8" compact="true">
+
+<isscript>
+  var powerboardCheckoutHelper = require('*/cartridge/scripts/powerboard/helpers/checkoutHelper');
+  var preferences = require('*/cartridge/config/preferences');
+  var order = pdict.Order;
+
+  // get PowerBoard Payment Instrument
+  var powerboardPI = powerboardCheckoutHelper.getPowerboardPaymentInstrument(order);
+
+  // defaults
+  var eligibleForCapture;
+  var eligibleForRefund;
+  var eligibleForCancel;
+  var underProcessing;
+
+  if (preferences.powerboard.powerboardBMChargeOperationsAll) { // all operations are always enabled
+    eligibleForCapture = true;
+    eligibleForRefund = true;
+    eligibleForCancel = true;
+    underProcessing = false;
+  }
+  else if (powerboardPI) { // check PowerBoard Payment Instrument eligibility
+    eligibleForCapture = powerboardCheckoutHelper.isPowerboardPaymentInstrumentEligibleForCapture(powerboardPI);
+    eligibleForRefund = powerboardCheckoutHelper.isPowerboardPaymentInstrumentEligibleForRefund(powerboardPI);
+    eligibleForCancel = powerboardCheckoutHelper.isPowerboardPaymentInstrumentEligibleForCancel(powerboardPI);
+    underProcessing = powerboardCheckoutHelper.isPowerboardPaymentInstrumentUnderProcessing(powerboardPI);
+  }
+</isscript>
+
+<h4 class="dw-nc-text-heading dw-nc-text-brand" style="margin-top: 20px;">
+  ${Resource.msg('powerboard.charge.operations.title','powerboardbm', null)}
+</h4>
+
+<isif condition="${!powerboardPI}">
+  <p class="dw-nc-text-danger">
+    ${Resource.msg('powerboard.charge.not.powerboard.payment.instrument.error','powerboardbm', null)}
+  </p>
+<iselseif condition="${!eligibleForCapture && !eligibleForRefund && !eligibleForCancel}"/>
+  <isif condition="${underProcessing}">
+    <p class="dw-nc-text-info">
+      ${Resource.msg('powerboard.charge.operations.under.processing.info','powerboardbm', null)}
+    </p>
+  <iselse/>
+    <p class="dw-nc-text-danger">
+      ${Resource.msg('powerboard.charge.operations.finalized.info','powerboardbm', null)}
+    </p>
+  </isif>
+<iselse/>
+  <form class="powerboard-charge-operations" id="powerboard-charge-operations"
+    action="${URLUtils.url('PowerBoardBM-HandleCharge')}" method="POST">
+
+    <input id="powerboardOrderID" name="orderID" type="hidden" value="${order.orderNo}" />
+    <input id="powerboardOrderToken" name="orderToken" type="hidden" value="${order.orderToken}" />
+
+    <table width="100%" cellspacing="10px" cellpadding="0" border="0">
+      <caption style="text-align: left;">${Resource.msg('powerboard.charge.operations.info','powerboardbm', null)}</caption>
+      <tbody>
+        <isif condition="${eligibleForCapture}">
+          <tr>
+            <th style="width: 20%;" align="left">${Resource.msg('powerboard.charge.capture.title','powerboardbm', null)}</th>
+            <td colspan="2" style="width: 80%" align="right"><button type="submit" name="operation" value="capture" class="button">${Resource.msg('powerboard.charge.issue.submit','powerboardbm', null)}</button></td>
+          </tr>
+        </isif>
+        <isif condition="${eligibleForRefund}">
+          <tr>
+            <th style="width: 20%;" align="left">${Resource.msg('powerboard.charge.refund.title','powerboardbm', null)}</th>
+            <td style="width: 60%"><input id="powerboardRefundAmount" name="refundAmount" type="number" step="0.01" placeholder="10.99" /></td>
+            <td style="width: 20%" align="right"><button type="submit" name="operation" value="refund" class="button">${Resource.msg('powerboard.charge.issue.submit','powerboardbm', null)}</button></td>
+          </tr>
+        </isif>
+        <isif condition="${eligibleForCancel}">
+          <tr>
+            <th style="width: 20%;" align="left">${Resource.msg('powerboard.charge.cancel.title','powerboardbm', null)}</th>
+            <td colspan="2" style="width: 80%" align="right"><button type="submit" name="operation" value="cancel" class="button">${Resource.msg('powerboard.charge.issue.submit','powerboardbm', null)}</button></td>
+          </tr>
+        </isif>
+      </tbody>
+    </table>
+
+    <p class="powerboard-operations-submit-result"></p>
+  </form>
+</isif>
+
+<script type="text/javascript" src="${URLUtils.staticURL('js/powerboardbm.js')}"></script>

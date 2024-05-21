@@ -1,0 +1,33 @@
+<isif condition="${!payment.error}">
+    <isif condition="${!pdict.currentStage}">
+        <div class="credit-card-type">
+            <span>${payment.accountType}</span>
+        </div>
+        <div class="credit-card-holder">
+            ${payment.owner}
+        </div>
+    <iselse/>
+        <button
+            id="powerboardCheckoutButtonZipMoney"
+            class="mt-2 mb-4"
+            style="width: 120px; background: none; border-radius: 5px;"
+            data-gateway-id="${payment.gatewayId}"
+            data-public-key="${payment.publicKey}"
+            <isif condition="${typeof payment.meta !== 'undefined' && payment.meta}">
+                data-meta="<isprint value="${JSON.stringify(payment.meta)}" encoding="on" />"
+            </isif>
+        >
+            <svg viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1.57138 21.8984L2.18053 26.8613H23.5065L22.8087 21.1777H12.8655L12.7786 20.4734L21.937 14.0736L21.3251 9.10059H0L0.697879 14.7842H10.6575L10.7453 15.4949L1.57138 21.8984Z" fill="#1A0826"></path>
+                <path d="M23.8027 9.10059L25.9842 26.8613H47.3267L45.1452 9.10059H23.8027Z" fill="#AA8FFF"></path>
+                <path d="M69.7072 15.495C69.2151 11.5026 66.0787 9.0833 61.8165 9.10068H47.6211L49.8007 26.8605H56.1868L55.7496 23.3089H62.508C67.8285 23.3089 70.2624 19.9942 69.7072 15.495ZM61.8192 18.3304L55.1423 18.3378L54.6191 14.0755L61.3335 14.081C62.9131 14.0993 63.7208 14.9883 63.8507 16.2057C63.9311 16.9877 63.5726 18.3295 61.8192 18.3295V18.3304Z" fill="#1A0826"></path>
+                <path d="M30.3076 6.81633C31.439 5.61278 31.2519 3.59906 29.8897 2.31855C28.5276 1.03804 26.5061 0.975643 25.3747 2.17919C24.2433 3.38273 24.4304 5.39646 25.7926 6.67697C27.1548 7.95748 29.1762 8.01987 30.3076 6.81633Z" fill="#1A0826"></path>
+
+            </svg>
+        </button>
+
+        <input name="payment_source_token_zipmoney" id="payment_source_token_zipmoney" type="hidden" />
+    </isif>
+<iselse/>
+    ${Resource.msg('powerboard.checkout.summary.checkout.button.initialization.error', 'powerboard', null)}
+</isif>

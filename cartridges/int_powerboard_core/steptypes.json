@@ -1,0 +1,98 @@
+{
+    "step-types": {
+        "script-module-step": [
+            {
+                "@type-id": "custom.PowerBoard.RefundCharges",
+                "module": "int_powerboard_core/cartridge/scripts/jobsteps/refundCharges.js",
+                "description": "Refund PowerBoard Charges.",
+                "function": "refund",
+                "parameters": {
+                    "parameter": [
+                        {
+                            "@name": "DaysPastTrack",
+                            "description": "Process only Orders newer than x-days specified",
+                            "@type": "string",
+                            "@required": "true",
+                            "default-value": 1,
+                            "@trim": "true"
+                        },
+                        {
+                            "@name": "RefundLimit",
+                            "description": "Limitation for the number Charge Refunds may be invoked at PowerBoard",
+                            "@type": "string",
+                            "@required": "true",
+                            "default-value": 1000,
+                            "@trim": "true"
+                        },
+                        {
+                            "@name": "FailedRefundLimit",
+                            "description": "Limitation for the number of failed Charge Refunds at PowerBoard",
+                            "@type": "string",
+                            "@required": "true",
+                            "default-value": 5,
+                            "@trim": "true"
+                        }
+                    ]
+                },
+                "status-codes": {
+                    "status": [
+                        {
+                            "@code": "ERROR",
+                            "description": "Used when an error occurred."
+                        },
+                        {
+                            "@code": "OK",
+                            "description": "Used when execution was successful."
+                        }
+                    ]
+                }
+            },
+            {
+                "@type-id": "custom.PowerBoard.CaptureCharges",
+                "module": "int_powerboard_core/cartridge/scripts/jobsteps/captureCharges.js",
+                "description": "Capture PowerBoard Charges.",
+                "function": "capture",
+                "parameters": {
+                    "parameter": [
+                        {
+                            "@name": "DaysPastTrack",
+                            "description": "Process only Orders newer than x-days specified",
+                            "@type": "string",
+                            "@required": "true",
+                            "default-value": 1,
+                            "@trim": "true"
+                        },
+                        {
+                            "@name": "CaptureLimit",
+                            "description": "Limitation for the number Charge Captures may be invoked at PowerBoard",
+                            "@type": "string",
+                            "@required": "true",
+                            "default-value": 1000,
+                            "@trim": "true"
+                        },
+                        {
+                            "@name": "FailedCaptureLimit",
+                            "description": "Limitation for the number of failed Charge Captures at PowerBoard",
+                            "@type": "string",
+                            "@required": "true",
+                            "default-value": 5,
+                            "@trim": "true"
+                        }
+                    ]
+                },
+                "status-codes": {
+                    "status": [
+                        {
+                            "@code": "ERROR",
+                            "description": "Used when an error occurred."
+                        },
+                        {
+                            "@code": "OK",
+                            "description": "Used when execution was successful."
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,8 @@
+<isscript>
+    var powerboardCheckoutHelper = require('*/cartridge/scripts/powerboard/helpers/checkoutHelper');
+
+    if (powerboardCheckoutHelper.isPowerboardPaymentMethodsEnabled()) {
+        var assets = require('*/cartridge/scripts/assets.js');
+        assets.addJs('https://widget.preproduction.powerboard.commbank.com.au/sdk/latest/widget.umd.js');
+    }
+</isscript>

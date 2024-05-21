@@ -1,0 +1,19 @@
+<isscript>
+    var isActive = pdict.selectedPowerboardPaymentInstrument ?
+        pdict.selectedPowerboardPaymentInstrument.paymentMethod === 'POWERBOARD_WALLET_BUTTONS_APPLE_PAY' :
+        false;
+</isscript>
+
+<li class="nav-item" data-method-id="${paymentOption.ID}">
+    <a class="nav-link powerboard-wallet-buttons-apple-pay-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#powerboard-wallet-buttons-apple-pay-content" role="tab">
+        <label>
+            ${paymentOption.name}
+        </label>
+    </a>
+</li>
+
+<div class="credit-card-selection-new" >
+    <div class="tab-content">
+        <isinclude template="checkout/billing/paymentOptions/powerboardWalletButtonsApplePayContent" />
+    </div>
+</div>

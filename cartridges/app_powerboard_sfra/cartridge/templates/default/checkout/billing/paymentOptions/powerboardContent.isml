@@ -1,0 +1,75 @@
+<isscript>
+    var isActive = pdict.selectedPowerboardPaymentInstrument ?
+        pdict.selectedPowerboardPaymentInstrument.paymentMethod === 'POWERBOARD' :
+        false;
+</isscript>
+
+<style>iframe {border: 0; width: 100%; height: 200px;}</style>
+
+<div class="tab-pane ${isActive ? 'active' : ''} powerboard-content" id="powerboard-content" content-id="${paymentOption.ID}" role="tabpanel">
+    <div style="text-align: center; margin-bottom: 12px;">
+        <img class="powerboard-option"
+            src="${URLUtils.staticURL('/images/powerboard.png')}"
+            width="260px"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
+    </div>
+    
+    <fieldset class="payment-form-fields credit-card-form ${pdict.customer.registeredUser && pdict.customer.customerPaymentInstruments.length ? 'checkout-hidden' : ''}">
+
+        <!--- payment method is PowerBoard --->
+        <input type="hidden" class="form-control"
+            name="${pdict.forms.billingForm.paymentMethod.htmlName}"
+            value="POWERBOARD"
+        >
+
+        <div id="powerboardWidget"
+            data-gateway-id="${pdict.powerboardGatewayID}"
+            data-public-key="${pdict.powerboardPublicAPIKey}"
+            data-dwfrm-name="${pdict.forms.billingForm.powerboardToken.htmlName}"
+            data-cart-scheme="${pdict.powerboardCardScheme}"
+            <isif condition="${typeof pdict.powerboardReferenceId !== 'undefined' && pdict.powerboardReferenceId}">
+                data-reference-id="${powerboardReferenceId}"
+            </isif>
+            <isif condition="${typeof pdict.powerboardWidgetStyles !== 'undefined' && pdict.powerboardWidgetStyles}">
+                data-styles="<isprint value="${JSON.stringify(pdict.powerboardWidgetStyles)}" encoding="on" />"
+            </isif>
+            submit-button="Submit Card"
+        ></div>
+
+        <input name="${pdict.forms.billingForm.powerboardToken.htmlName}" id="payment_source_token" type="hidden">
+        <input name="${pdict.forms.billingForm.browserDetails.htmlName}" id="powerboard_browser_details" type="hidden">
+
+        <div class="row">
+            <div class="col">
+                <isif condition="${pdict.customer.registeredUser && pdict.powerboardEnableSaveCard}">
+                    <div class="save-credit-card custom-control custom-checkbox ">
+                        <input type="checkbox" class="custom-control-input" id="savePowerboardCard" name="${pdict.forms.billingForm.savePowerboardCard.htmlName}" value="true" checked>
+                        <label class="custom-control-label" for="savePowerboardCard">
+                            ${pdict.forms.billingForm.savePowerboardCard.label}
+                        </label>
+                    </div>
+                </isif>
+            </div>
+        </div>
+
+        <isif condition="${pdict.customer.registeredUser}">
+            <button class="btn btn-block cancel-new-payment btn-outline-primary ${pdict.customer.registeredUser && pdict.customer.customerPaymentInstruments.length ? '' : 'checkout-hidden'}" type="button">${Resource.msg('button.back.to.stored.payments', 'checkout', null)}</button>
+        </isif>
+    </fieldset>
+
+    <isif condition="${pdict.customer.registeredUser}">
+        <div class="user-payment-instruments container ${pdict.customer.registeredUser && pdict.customer.customerPaymentInstruments.length ? '' : 'checkout-hidden'}">
+            <!--- Stored user payments --->
+            <div class="stored-payments">
+                <isinclude template="checkout/billing/powerboardStoredPaymentInstruments" />
+            </div>
+
+            <!--- Add new credit card button --->
+            <div class="row">
+                <button class="btn btn-block add-payment btn-outline-primary" type="button">${Resource.msg('button.add.payment', 'checkout', null)}</button>
+            </div>
+        </div>
+    </isif>
+</div>

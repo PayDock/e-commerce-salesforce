@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jobs xmlns="http://www.demandware.com/xml/impex/jobs/2015-07-01">
+    <job job-id="CapturePowerBoardCharges">
+        <description>CapturePowerBoardCharges</description>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="CaptureCharges" type="custom.PowerBoard.CaptureCharges" enforce-restart="false">
+                <description>Capture PowerBoard Charges</description>
+                <parameters>
+                    <parameter name="DaysPastTrack">1</parameter>
+                    <parameter name="CaptureLimit">1000</parameter>
+                    <parameter name="FailedCaptureLimit">5</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-recurring enabled="false">
+                <recurrence>
+                    <date-from>2024-03-15Z</date-from>
+                    <start-time>15:33:00.000Z</start-time>
+                    <interval>12M</interval>
+                    <day-of-week/>
+                </recurrence>
+            </run-recurring>
+        </triggers>
+    </job>
+
+    <job job-id="RefundPowerBoardCharges">
+        <description>Refund PowerBoard Charges</description>
+        <parameters/>
+        <flow>
+            <context site-id="RefArch"/>
+            <step step-id="RefundCharges" type="custom.PowerBoard.RefundCharges" enforce-restart="false">
+                <description>Refund PowerBoard Charges</description>
+                <parameters>
+                    <parameter name="DaysPastTrack">1</parameter>
+                    <parameter name="RefundLimit">10</parameter>
+                    <parameter name="FailedRefundLimit">5</parameter>
+                </parameters>
+            </step>
+        </flow>
+        <rules/>
+        <triggers>
+            <run-once enabled="true">
+                <date>2024-03-10Z</date>
+                <time>19:15:00.000Z</time>
+            </run-once>
+        </triggers>
+    </job>
+
+</jobs>
