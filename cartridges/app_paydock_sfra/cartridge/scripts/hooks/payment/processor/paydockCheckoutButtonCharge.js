@@ -79,15 +79,11 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
   var fraudServiceID = paymentInstrument.paymentMethod === 'PAYDOCK_CHECKOUT_BUTTON_AFTERPAY' ?
     preferences.paydock.paydockCheckoutButtonAfterpayFraudServiceID :
     preferences.paydock.paydockCheckoutButtonZipMoneyFraudServiceID;
-  var fraudMode = paymentInstrument.paymentMethod === 'PAYDOCK_CHECKOUT_BUTTON_AFTERPAY' ?
-    'active' :
-    'passive';
 
   // add fraud details
   if (fraudEnabled && fraudServiceID) {
     chargeReqObj.fraud = {
-      service_id: fraudServiceID,
-      mode: fraudMode
+      service_id: fraudServiceID
     };
   }
 
@@ -111,6 +107,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
       paymentInstrument.custom.paydockToken = paymentInstrument.custom.paydockToken && paymentInstrument.custom.paydockToken.length > 32 ? paymentInstrument.custom.paydockToken.substring(0, 31) : paymentInstrument.custom.paydockToken;
       if (chargeResult.resource.data._id) {
         paymentInstrument.custom.paydockChargeID = chargeResult.resource.data._id;
+        order.custom.paydockChargeID = chargeResult.resource.data._id;
         paymentInstrument.paymentTransaction.setTransactionID(chargeResult.resource.data._id);
       }
 
@@ -118,6 +115,8 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
       var customerSource = chargeResult.resource.data.customer;
       paymentInstrument.creditCardHolder = customerSource.first_name + ' ' + customerSource.last_name;
       paymentInstrument.paymentTransaction.setAccountType(customerSource.payment_source.gateway_type);
+
+      order.custom.paydockPaymentMethod = paymentInstrument.getPaymentMethod();
   
       if (chargeResult.resource.data.status === 'complete') {
         order.setPaymentStatus(Order.PAYMENT_STATUS_PAID);

@@ -111,6 +111,8 @@ server.post('HandleCharge', function (req, res, next) {
                 // cancel the order
                 Transaction.wrap(function() {
                     OrderMgr.cancelOrder(order);
+                    order.setCancelCode('Paydock');
+                    order.setCancelDescription('Cancelled due to Payment Cancellation');
                 });
             }
             catch (e) {

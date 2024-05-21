@@ -46,14 +46,14 @@ function getPaydockServiceDefinition() {
 		createRequest: function (svc, requestObject) {
 			const apiSecretKey = preferences.paydock.paydockPrivateAPIKey;
 
-      if (preferences.paydock.paydockConnectionType.value === 'paydockKey') {
-        svc.addHeader('x-user-secret-key', apiSecretKey);
-      } else {
-        svc.addHeader('x-access-token', apiSecretKey);
-      }
+			if (preferences.paydock.paydockConnectionType.value === 'paydockKey') {
+				svc.addHeader('x-user-secret-key', apiSecretKey);
+			} else {
+				svc.addHeader('x-access-token', apiSecretKey);
+			}
 
-      var sfccHeader = 'V' + preferences.paydock.version + '_B2C_' + System.getCompatibilityMode();
-      svc.addHeader('X-Salesforce-Meta', sfccHeader);
+			var sfccHeader = 'V' + preferences.paydock.version + '_B2C_' + System.getCompatibilityMode();
+			svc.addHeader('X-Salesforce-Meta', sfccHeader);
 			svc.addHeader("Content-Type", "application/json");
 
 			var URL = svc.configuration.credential.URL;
@@ -86,6 +86,16 @@ function getPaydockServiceDefinition() {
 		parseResponse: function (svc, httpClient) {
 			return JSON.parse(httpClient.text);
 		},
+
+		/**
+		 * A callback function to filter Paydock web service communication messaging
+		 *
+		 * @param {string} msg - Communication message
+		 * @returns {string} - Filtered communication message
+		 */
+		filterLogMessage: function(msg) {
+			return msg.replace(/CreditCardNo\: \".*?\"/, "CreditCardNo:********");
+		}
 	});
 }
 

@@ -7,10 +7,6 @@
 node_modules/
 dist/
 static/
-cartridges/app_paydock_sfra/cartridge/static/*/js/
-cartridges/app_paydock_sfra/cartridge/static/*/css/
-cartridges/app_storefront_base/cartridge/static/*/js/
-cartridges/app_storefront_base/cartridge/static/*/css/
 
 # Compiled Java class files
 *.class
@@ -56,3 +52,5 @@ Thumbs.db
 *.wmv
 
 !cartridges
+
+package-lock.json

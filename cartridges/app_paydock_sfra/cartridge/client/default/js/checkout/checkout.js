@@ -323,6 +323,9 @@ var scrollAnimate = require('base/components/scrollAnimate');
                                     window.location.href = data.redirectUrl;
                                 }
 
+                                // reload Paydock Widget on error
+                                billingHelpers.methods.paydockWidgetReload();
+
                                 defer.reject();
                             } else {
                                 //

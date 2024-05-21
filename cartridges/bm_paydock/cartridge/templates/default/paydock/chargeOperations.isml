@@ -12,16 +12,19 @@
   var eligibleForCapture;
   var eligibleForRefund;
   var eligibleForCancel;
+  var underProcessing;
 
   if (preferences.paydock.paydockBMChargeOperationsAll) { // all operations are always enabled
     eligibleForCapture = true;
     eligibleForRefund = true;
     eligibleForCancel = true;
+    underProcessing = false;
   }
   else if (paydockPI) { // check Paydock Payment Instrument eligibility
     eligibleForCapture = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForCapture(paydockPI);
     eligibleForRefund = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForRefund(paydockPI);
     eligibleForCancel = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForCancel(paydockPI);
+    underProcessing = paydockCheckoutHelper.isPaydockPaymentInstrumentUnderProcessing(paydockPI);
   }
 </isscript>
 
@@ -34,9 +37,15 @@
     ${Resource.msg('paydock.charge.not.paydock.payment.instrument.error','paydockbm', null)}
   </p>
 <iselseif condition="${!eligibleForCapture && !eligibleForRefund && !eligibleForCancel}"/>
-  <p class="dw-nc-text-danger">
-    ${Resource.msg('paydock.charge.operations.finalized.info','paydockbm', null)}
-  </p>
+  <isif condition="${underProcessing}">
+    <p class="dw-nc-text-info">
+      ${Resource.msg('paydock.charge.operations.under.processing.info','paydockbm', null)}
+    </p>
+  <iselse/>
+    <p class="dw-nc-text-danger">
+      ${Resource.msg('paydock.charge.operations.finalized.info','paydockbm', null)}
+    </p>
+  </isif>
 <iselse/>
   <form class="paydock-charge-operations" id="paydock-charge-operations"
     action="${URLUtils.url('PaydockBM-HandleCharge')}" method="POST">

@@ -6,7 +6,7 @@
  *
  */
 
-var Logger = require('dw/system/Logger').getLogger('paydock', 'job.captureCharges');
+var Logger = require('dw/system/Logger').getLogger('PAYDOCK', 'job.captureCharges');
 var Status = require('dw/system/Status');
 var OrderMgr = require('dw/order/OrderMgr');
 var Order = require('dw/order/Order');
