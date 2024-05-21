@@ -1,0 +1,19 @@
+<isscript>
+    var isActive = pdict.selectedPaydockPaymentInstrument ?
+        pdict.selectedPaydockPaymentInstrument.paymentMethod === 'PAYDOCK_WALLET_BUTTONS_GOOGLE_PAY' :
+        false;
+</isscript>
+
+<li class="nav-item" data-method-id="${paymentOption.ID}">
+    <a class="nav-link paydock-wallet-buttons-google-pay-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#paydock-wallet-buttons-google-pay-content" role="tab">
+        <label>
+            ${paymentOption.name}
+        </label>
+    </a>
+</li>
+
+<div class="credit-card-selection-new" >
+    <div class="tab-content">
+        <isinclude template="checkout/billing/paymentOptions/paydockWalletButtonsGooglePayContent" />
+    </div>
+</div>

@@ -1,0 +1,85 @@
+<iscontent type="text/html" charset="UTF-8" compact="true">
+
+<isscript>
+  var paydockCheckoutHelper = require('*/cartridge/scripts/paydock/helpers/checkoutHelper');
+  var preferences = require('*/cartridge/config/preferences');
+  var order = pdict.Order;
+
+  // get Paydock Payment Instrument
+  var paydockPI = paydockCheckoutHelper.getPaydockPaymentInstrument(order);
+
+  // defaults
+  var eligibleForCapture;
+  var eligibleForRefund;
+  var eligibleForCancel;
+  var underProcessing;
+
+  if (preferences.paydock.paydockBMChargeOperationsAll) { // all operations are always enabled
+    eligibleForCapture = true;
+    eligibleForRefund = true;
+    eligibleForCancel = true;
+    underProcessing = false;
+  }
+  else if (paydockPI) { // check Paydock Payment Instrument eligibility
+    eligibleForCapture = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForCapture(paydockPI);
+    eligibleForRefund = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForRefund(paydockPI);
+    eligibleForCancel = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForCancel(paydockPI);
+    underProcessing = paydockCheckoutHelper.isPaydockPaymentInstrumentUnderProcessing(paydockPI);
+  }
+</isscript>
+
+<h4 class="dw-nc-text-heading dw-nc-text-brand" style="margin-top: 20px;">
+  ${Resource.msg('paydock.charge.operations.title','paydockbm', null)}
+</h4>
+
+<isif condition="${!paydockPI}">
+  <p class="dw-nc-text-danger">
+    ${Resource.msg('paydock.charge.not.paydock.payment.instrument.error','paydockbm', null)}
+  </p>
+<iselseif condition="${!eligibleForCapture && !eligibleForRefund && !eligibleForCancel}"/>
+  <isif condition="${underProcessing}">
+    <p class="dw-nc-text-info">
+      ${Resource.msg('paydock.charge.operations.under.processing.info','paydockbm', null)}
+    </p>
+  <iselse/>
+    <p class="dw-nc-text-danger">
+      ${Resource.msg('paydock.charge.operations.finalized.info','paydockbm', null)}
+    </p>
+  </isif>
+<iselse/>
+  <form class="paydock-charge-operations" id="paydock-charge-operations"
+    action="${URLUtils.url('PaydockBM-HandleCharge')}" method="POST">
+
+    <input id="paydockOrderID" name="orderID" type="hidden" value="${order.orderNo}" />
+    <input id="paydockOrderToken" name="orderToken" type="hidden" value="${order.orderToken}" />
+
+    <table width="100%" cellspacing="10px" cellpadding="0" border="0">
+      <caption style="text-align: left;">${Resource.msg('paydock.charge.operations.info','paydockbm', null)}</caption>
+      <tbody>
+        <isif condition="${eligibleForCapture}">
+          <tr>
+            <th style="width: 20%;" align="left">${Resource.msg('paydock.charge.capture.title','paydockbm', null)}</th>
+            <td colspan="2" style="width: 80%" align="right"><button type="submit" name="operation" value="capture" class="button">${Resource.msg('paydock.charge.issue.submit','paydockbm', null)}</button></td>
+          </tr>
+        </isif>
+        <isif condition="${eligibleForRefund}">
+          <tr>
+            <th style="width: 20%;" align="left">${Resource.msg('paydock.charge.refund.title','paydockbm', null)}</th>
+            <td style="width: 60%"><input id="paydockRefundAmount" name="refundAmount" type="number" step="0.01" placeholder="10.99" /></td>
+            <td style="width: 20%" align="right"><button type="submit" name="operation" value="refund" class="button">${Resource.msg('paydock.charge.issue.submit','paydockbm', null)}</button></td>
+          </tr>
+        </isif>
+        <isif condition="${eligibleForCancel}">
+          <tr>
+            <th style="width: 20%;" align="left">${Resource.msg('paydock.charge.cancel.title','paydockbm', null)}</th>
+            <td colspan="2" style="width: 80%" align="right"><button type="submit" name="operation" value="cancel" class="button">${Resource.msg('paydock.charge.issue.submit','paydockbm', null)}</button></td>
+          </tr>
+        </isif>
+      </tbody>
+    </table>
+
+    <p class="paydock-operations-submit-result"></p>
+  </form>
+</isif>
+
+<script type="text/javascript" src="${URLUtils.staticURL('js/paydockbm.js')}"></script>

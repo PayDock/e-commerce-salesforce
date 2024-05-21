@@ -2,6 +2,7 @@
 
 const LocalServiceRegistry = require('dw/svc/LocalServiceRegistry');
 const Site = require('dw/system/Site');
+const System = require('dw/system/System');
 
 var preferences = require('*/cartridge/config/preferences');
 
@@ -45,7 +46,14 @@ function getPaydockServiceDefinition() {
 		createRequest: function (svc, requestObject) {
 			const apiSecretKey = preferences.paydock.paydockPrivateAPIKey;
 
-			svc.addHeader('x-user-secret-key', apiSecretKey);
+			if (preferences.paydock.paydockConnectionType.value === 'paydockKey') {
+				svc.addHeader('x-user-secret-key', apiSecretKey);
+			} else {
+				svc.addHeader('x-access-token', apiSecretKey);
+			}
+
+			var sfccHeader = 'V' + preferences.paydock.version + '_B2C_' + System.getCompatibilityMode();
+			svc.addHeader('X-Salesforce-Meta', sfccHeader);
 			svc.addHeader("Content-Type", "application/json");
 
 			var URL = svc.configuration.credential.URL;
@@ -78,6 +86,16 @@ function getPaydockServiceDefinition() {
 		parseResponse: function (svc, httpClient) {
 			return JSON.parse(httpClient.text);
 		},
+
+		/**
+		 * A callback function to filter Paydock web service communication messaging
+		 *
+		 * @param {string} msg - Communication message
+		 * @returns {string} - Filtered communication message
+		 */
+		filterLogMessage: function(msg) {
+			return msg.replace(/CreditCardNo\: \".*?\"/, "CreditCardNo:********");
+		}
 	});
 }
 
@@ -117,6 +135,18 @@ function callService(requestObject) {
 
 module.exports.call = callService;
 
+module.exports.tokens = {
+	create: function(tokenPayload) {
+		var requestObject = {
+			endpoint: '/v1/payment_sources/tokens',
+			httpMethod: 'POST',
+			payload: tokenPayload
+		};
+
+		return callService(requestObject);
+	}
+};
+
 module.exports.vaults = {
 	create: function(vaultPayload) {
 		var requestObject = {
@@ -130,13 +160,21 @@ module.exports.vaults = {
 };
 
 module.exports.charges = {
-	create: function(chargePayload) {
+	get: function(chargeId) {
+		var requestObject = {
+			endpoint: '/v1/charges/' + chargeId,
+			httpMethod: 'GET'
+		};
+
+		return callService(requestObject);
+	},
+	create: function(chargePayload, chargeCapture) {
 		var requestObject = {
 			endpoint: '/v1/charges',
 			httpMethod: 'POST',
 			payload: chargePayload,
       		queryString: {
-        		capture: preferences.paydock.paydockChargeCapture.toString()
+        		capture: (!!chargeCapture).toString()
 			}
 		};
 
@@ -156,6 +194,82 @@ module.exports.charges = {
 			endpoint: '/v1/charges/' + chargeId + '/capture',
 			httpMethod: 'POST',
 			payload: capturePayload
+		};
+
+		return callService(requestObject);
+	},
+	wallet: function(chargePayload, chargeCapture) {
+		var requestObject = {
+			endpoint: '/v1/charges/wallet',
+			httpMethod: 'POST',
+			payload: chargePayload,
+			queryString: {
+				capture: (!!chargeCapture).toString()
+			}
+		};
+		
+		return callService(requestObject);
+	},
+	fraud: function(fraudPayload) {
+		var requestObject = {
+			endpoint: '/v1/charges/fraud',
+			httpMethod: 'POST',
+			payload: fraudPayload
+		};
+
+		return callService(requestObject);
+	},
+	cancel: function(chargeId) {
+		var requestObject = {
+			endpoint: '/v1/charges/' + chargeId + '/capture',
+			httpMethod: 'DELETE'
+		};
+
+		return callService(requestObject);
+	},
+	archive: function(chargeId) {
+		var requestObject = {
+			endpoint: '/v1/charges/' + chargeId,
+			httpMethod: 'DELETE'
+		};
+		
+		return callService(requestObject);
+	},
+	attachFraud: function(chargeId, fraudPayload) {
+		var requestObject = {
+			endpoint: '/v1/charges/' + chargeId + '/fraud/attach',
+			httpMethod: 'POST',
+			payload: fraudPayload
+		};
+
+		return callService(requestObject);
+	},
+  preAuth: function (payload) {
+    var requestObject = {
+			endpoint: '/v1/charges/3ds',
+			httpMethod: 'POST',
+			payload: payload
+		};
+
+		return callService(requestObject);
+  },
+  standalone3DS: function (payload) {
+    var requestObject = {
+			endpoint: '/v1/charges/standalone-3ds',
+			httpMethod: 'POST',
+			payload: payload
+		};
+
+		return callService(requestObject);
+  }
+};
+
+module.exports.customers = {
+	create: function(customersPayload) {
+		var requestObject = {
+			endpoint: '/v1/customers',
+			httpMethod: 'POST',
+			payload: customersPayload
 		};
 
 		return callService(requestObject);

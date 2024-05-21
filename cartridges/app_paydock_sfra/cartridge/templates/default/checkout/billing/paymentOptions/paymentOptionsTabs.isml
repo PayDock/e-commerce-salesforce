@@ -2,6 +2,24 @@
     <isif condition="${paymentOption.ID === 'PAYDOCK'}">
         <isinclude template="checkout/billing/paymentOptions/paydockTab" />
     </isif>
+    <isif condition="${paymentOption.ID === 'PAYDOCK_WALLET_BUTTONS_APPLE_PAY'}">
+        <isinclude template="checkout/billing/paymentOptions/paydockWalletButtonsApplePayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'PAYDOCK_WALLET_BUTTONS_GOOGLE_PAY'}">
+        <isinclude template="checkout/billing/paymentOptions/paydockWalletButtonsGooglePayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'PAYDOCK_WALLET_BUTTONS_PAYPAL'}">
+        <isinclude template="checkout/billing/paymentOptions/paydockWalletButtonsPayPalTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'PAYDOCK_WALLET_BUTTONS_AFTERPAY'}">
+        <isinclude template="checkout/billing/paymentOptions/paydockWalletButtonsAfterpayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'PAYDOCK_CHECKOUT_BUTTON_AFTERPAY'}">
+        <isinclude template="checkout/billing/paymentOptions/paydockCheckoutButtonAfterpayTab" />
+    </isif>
+    <isif condition="${paymentOption.ID === 'PAYDOCK_CHECKOUT_BUTTON_ZIPMONEY'}">
+        <isinclude template="checkout/billing/paymentOptions/paydockCheckoutButtonZipMoneyTab" />
+    </isif>
     <isif condition="${paymentOption.ID === 'CREDIT_CARD'}">
         <isinclude template="checkout/billing/paymentOptions/creditCardTab" />
     </isif>
