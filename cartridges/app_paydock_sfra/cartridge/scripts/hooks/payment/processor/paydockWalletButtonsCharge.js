@@ -103,7 +103,9 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
       var customerSource = chargeResult.resource.data.customer;
       paymentInstrument.creditCardHolder = customerSource.first_name + ' ' + customerSource.last_name;
       paymentInstrument.paymentTransaction.setAccountType(customerSource.payment_source.gateway_type);
-  
+
+      order.custom.paydockPaymentMethod = paymentInstrument.getPaymentMethod();
+
       if (chargeResult.resource.data.status === 'complete') {
         order.setPaymentStatus(Order.PAYMENT_STATUS_PAID);
       }

@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://www.demandware.com/xml/impex/metadata/2006-10-31">
+    <type-extension type-id="CustomerPaymentInstrument">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="paydockCustomerID">
+                <display-name xml:lang="x-default">Paydock Customer ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockVaultToken">
+                <display-name xml:lang="x-default">Paydock Vault Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCardDetails">
+                <display-name xml:lang="x-default">Paydock Card Details</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+
+    <type-extension type-id="Basket">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="paydockChargeID">
+                <display-name xml:lang="x-default">Paydock Charge ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockFraudID">
+                    <display-name xml:lang="x-default">Paydock Fraud ID</display-name>
+                    <type>string</type>
+                    <mandatory-flag>false</mandatory-flag>
+                    <externally-managed-flag>false</externally-managed-flag>
+                    <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+
+    <type-extension type-id="Order">
+        <custom-attribute-definitions>
+             <attribute-definition attribute-id="paydockCaptured">
+                <display-name xml:lang="x-default">Paydock Captured</display-name>
+                <description xml:lang="x-default">All Paydock charges captured</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockChargeID">
+                <display-name xml:lang="x-default">Paydock Charge ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockPaymentMethod">
+                <display-name xml:lang="x-default">Paydock Payment Method</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockRefunded">
+                <display-name xml:lang="x-default">Paydock Refunded</display-name>
+                <description xml:lang="x-default">All Paydock charges refunded</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockFraudID">
+                <display-name xml:lang="x-default">Paydock Fraud ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Paydock">
+                <display-name xml:lang="x-default">Paydock</display-name>
+                <attribute attribute-id="paydockChargeID"/>
+                <attribute attribute-id="paydockCaptured"/>
+                <attribute attribute-id="paydockRefunded"/>
+                <attribute attribute-id="paydockFraudID"/>
+                <attribute attribute-id="paydockPaymentMethod"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+
+    <type-extension type-id="OrderPaymentInstrument">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="paydock3DSToken">
+                <display-name xml:lang="x-default">Paydock 3DS Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCardDetails">
+                <display-name xml:lang="x-default">Paydock Card Details</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCapturedAmount">
+                <display-name xml:lang="x-default">Paydock Captured Amount</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockChargeID">
+                <display-name xml:lang="x-default">Paydock Charge ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCharge3DSToken">
+                <display-name xml:lang="x-default">Paydock Charge 3DS Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockChargeStatus">
+                <display-name xml:lang="x-default">Paydock Charge Status</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCustomerID">
+                <display-name xml:lang="x-default">Paydock Customer ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockGatewayType">
+                <display-name xml:lang="x-default">Paydock Gateway Type</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockRefundedAmount">
+                <display-name xml:lang="x-default">Paydock Refunded Amount</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockSaveCard">
+                <display-name xml:lang="x-default">Paydock Save Card</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockToken">
+                <display-name xml:lang="x-default">Paydock Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockVaultToken">
+                <display-name xml:lang="x-default">Paydock Vault Token</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockVaultType">
+                <display-name xml:lang="x-default">Paydock Vault Type</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockFraudID">
+                <display-name xml:lang="x-default">Paydock Fraud ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockFraudStatus">
+                <display-name xml:lang="x-default">Paydock Fraud Status</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+        </custom-attribute-definitions>
+    </type-extension>
+
+    <type-extension type-id="PaymentTransaction">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="paydockCaptureAmount">
+                <display-name xml:lang="x-default">Paydock Capture Amount</display-name>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Custom">
+                <display-name xml:lang="x-default">Custom</display-name>
+                <attribute attribute-id="eFundsTransactionHistory"/>
+                <attribute attribute-id="paydockCaptureAmount"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+
+    <type-extension type-id="SitePreferences">
+        <custom-attribute-definitions>
+            <attribute-definition attribute-id="paydockAPIToken">
+                <display-name xml:lang="x-default">API access token</display-name>
+                <description xml:lang="x-default">Enter the API Access Token for authentication.  This key is used for authentication to ensure secure communication with the payment gateway. It needs to be filled in only if API Public Key &amp; API Secret Key is not entered.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockBMChargeOperationsAll">
+                <display-name xml:lang="x-default">All Charge Operations</display-name>
+                <description xml:lang="x-default">Charge Operations Display All</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCardScheme">
+                <display-name xml:lang="x-default">Supported card schemes</display-name>
+                <type>set-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockChargeCapture">
+                <display-name xml:lang="x-default">Direct charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockConnectionType">
+                <display-name xml:lang="x-default">Connection Type</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">With Key</display>
+                        <value>paydockKey</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">With Token</display>
+                        <value>paydockToken</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockEnableSaveCard">
+                <display-name xml:lang="x-default">Save card</display-name>
+                <description xml:lang="x-default">Offer your customer to save the card permanently at Paydock.</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockFraudServiceID">
+                <display-name xml:lang="x-default">Fraud service ID</display-name>
+                <description xml:lang="x-default">Required for “Standalone Fraud” and “In-built Fraud”</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockFraudType">
+                <display-name xml:lang="x-default">Fraud</display-name>
+                <description xml:lang="x-default">“In-built Fraud” is not supported when “standalone 3DS” is selected. “Standalone Fraud” is not supported when “In-built 3DS with OTT” is selected.</description>
+                <type>enum-of-string</type>
+                <mandatory-flag>true</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Disabled</display>
+                        <value>disabledFraud</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Standalone Fraud</display>
+                        <value>standaloneFraud</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">In-built Fraud</display>
+                        <value>inbuiltFraud</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockGatewayID">
+                <display-name xml:lang="x-default">Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockPrivateAPIKey">
+                <display-name xml:lang="x-default">Secret key</display-name>
+                <description xml:lang="x-default">Enter the API Secret key for authentication. This key is used for authentication to ensure secure communication with the payment gateway.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockPublicAPIKey">
+                <display-name xml:lang="x-default">Public key</display-name>
+                <description xml:lang="x-default">Enter the API Public key for authentication. This key is used for authentication to ensure secure communication with the payment gateway.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockRawErrorMessaging">
+                <display-name xml:lang="x-default">Raw Error Messaging</display-name>
+                <description xml:lang="x-default">Raw Error Messaging or User Friendly one at Checkout</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockSaveCardMethod">
+                <display-name xml:lang="x-default">Save card option</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>true</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Vault Token</display>
+                        <value>vaultToken</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Customer with Gateway ID</display>
+                        <value>customerWithGatewayID</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Customer without Gateway ID</display>
+                        <value>customerWithoutGatewayID</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonAfterpayChargeCapture">
+                <display-name xml:lang="x-default">Afterpay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonAfterpayGatewayID">
+                <display-name xml:lang="x-default">Afterpay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonZipMoneyChargeCapture">
+                <display-name xml:lang="x-default">Zip Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonZipMoneyGatewayID">
+                <display-name xml:lang="x-default">Zip Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsAfterpayChargeCapture">
+                <display-name xml:lang="x-default">Afterpay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsAfterpayGatewayID">
+                <display-name xml:lang="x-default">Afterpay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsAfterpayFraud">
+                <display-name xml:lang="x-default">Afterpay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsAfterpayFraudServiceID">
+                <display-name xml:lang="x-default">Afterpay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonAfterpayFraud">
+                <display-name xml:lang="x-default">Afterpay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonAfterpayFraudServiceID">
+                <display-name xml:lang="x-default">Afterpay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonZipMoneyFraud">
+                <display-name xml:lang="x-default">ZipMoney Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockCheckoutButtonZipMoneyFraudServiceID">
+                <display-name xml:lang="x-default">ZipMoney fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsApplePayChargeCapture">
+                <display-name xml:lang="x-default">Apple Pay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsApplePayGatewayID">
+                <display-name xml:lang="x-default">Apple Pay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsApplePayFraud">
+                <display-name xml:lang="x-default">Apple Pay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsApplePayFraudServiceID">
+                <display-name xml:lang="x-default">Apple Pay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsGooglePayChargeCapture">
+                <display-name xml:lang="x-default">Google Pay Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsGooglePayGatewayID">
+                <display-name xml:lang="x-default">Google Pay Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsGooglePayFraud">
+                <display-name xml:lang="x-default">Google Pay Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsGooglePayFraudServiceID">
+                <display-name xml:lang="x-default">Google Pay fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsPayPalChargeCapture">
+                <display-name xml:lang="x-default">PayPal Direct Charge</display-name>
+                <description xml:lang="x-default">Direct charge stands for authorization and capture  in a single request</description>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>true</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsPayPalGatewayID">
+                <display-name xml:lang="x-default">PayPal Gateway ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsPayPalFraud">
+                <display-name xml:lang="x-default">PayPal Fraud</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsPayPalFraudServiceID">
+                <display-name xml:lang="x-default">PayPal fraud service ID</display-name>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsPayPalPayLater">
+                <display-name xml:lang="x-default">PayPal Pay Later</display-name>
+                <type>boolean</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <default-value>false</default-value>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWidgetStyles">
+                <display-name xml:lang="x-default">Widget Styles</display-name>
+                <description xml:lang="x-default">Widget Styles JSON</description>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWidgetToken">
+                <display-name xml:lang="x-default">Widget access token</display-name>
+                <description xml:lang="x-default">Enter the Widget Access Token for authentication.  This key is used for authentication to ensure secure communication with the payment gateway. It needs to be filled in only if API Public Key &amp; API Secret Key is not entered.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydock3DSFlow">
+                <display-name xml:lang="x-default">3DS flow</display-name>
+                <description xml:lang="x-default">When 3DS is enabled, select which 3DS flow to be supported. For Standalone 3DS, charge creation is supported “with vault”. For In-built 3DS, charge creation is supported “with vault” and “with OTT”. For “In-built 3DS with OTT”, save card method is not supported.</description>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">With Vault</display>
+                        <value>vault</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">With OTT</display>
+                        <value>ott</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydock3DSServiceID">
+                <display-name xml:lang="x-default">3DS service ID</display-name>
+                <description xml:lang="x-default">Only required when standalone 3DS is enabled.</description>
+                <type>string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydock3DSType">
+                <display-name xml:lang="x-default">3DS</display-name>
+                <description xml:lang="x-default">“Standalone 3DS” is not supported with “In-built Fraud”.</description>
+                <type>enum-of-string</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Disable</display>
+                        <value>disabled3DS</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">In-built 3DS</display>
+                        <value>inbuilt3DS</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Standalobe 3DS</display>
+                        <value>standalone3DS</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
+        </custom-attribute-definitions>
+        <group-definitions>
+            <attribute-group group-id="Paydock">
+                <display-name xml:lang="x-default">Paydock Access &amp; Cards</display-name>
+                <attribute attribute-id="paydockPublicAPIKey"/>
+                <attribute attribute-id="paydockPrivateAPIKey"/>
+                <attribute attribute-id="paydockAPIToken"/>
+                <attribute attribute-id="paydockWidgetToken"/>
+                <attribute attribute-id="paydockCardScheme"/>
+                <attribute attribute-id="paydockGatewayID"/>
+                <attribute attribute-id="paydock3DSType"/>
+                <attribute attribute-id="paydock3DSServiceID"/>
+                <attribute attribute-id="paydock3DSFlow"/>
+                <attribute attribute-id="paydockFraudType"/>
+                <attribute attribute-id="paydockFraudServiceID"/>
+                <attribute attribute-id="paydockChargeCapture"/>
+                <attribute attribute-id="paydockEnableSaveCard"/>
+                <attribute attribute-id="paydockSaveCardMethod"/>
+                <attribute attribute-id="paydockConnectionType"/>
+                <attribute attribute-id="paydockRawErrorMessaging"/>
+                <attribute attribute-id="paydockWidgetStyles"/>
+                <attribute attribute-id="paydockBMChargeOperationsAll"/>
+            </attribute-group>
+            <attribute-group group-id="PaydockWalletButtons">
+                <display-name xml:lang="x-default">Paydock Wallets</display-name>
+                <attribute attribute-id="paydockWalletButtonsApplePayGatewayID"/>
+                <attribute attribute-id="paydockWalletButtonsApplePayChargeCapture"/>
+                <attribute attribute-id="paydockWalletButtonsApplePayFraud"/>
+                <attribute attribute-id="paydockWalletButtonsApplePayFraudServiceID"/>
+                <attribute attribute-id="paydockWalletButtonsGooglePayGatewayID"/>
+                <attribute attribute-id="paydockWalletButtonsGooglePayChargeCapture"/>
+                <attribute attribute-id="paydockWalletButtonsGooglePayFraud"/>
+                <attribute attribute-id="paydockWalletButtonsGooglePayFraudServiceID"/>
+                <attribute attribute-id="paydockWalletButtonsPayPalGatewayID"/>
+                <attribute attribute-id="paydockWalletButtonsPayPalChargeCapture"/>
+                <attribute attribute-id="paydockWalletButtonsPayPalFraud"/>
+                <attribute attribute-id="paydockWalletButtonsPayPalFraudServiceID"/>
+                <attribute attribute-id="paydockWalletButtonsPayPalPayLater"/>
+            </attribute-group>
+            <attribute-group group-id="PaydockCheckoutButtons">
+                <display-name xml:lang="x-default">Paydock Alternative Payment Methods</display-name>
+                <attribute attribute-id="paydockCheckoutButtonZipMoneyGatewayID"/>
+                <attribute attribute-id="paydockCheckoutButtonZipMoneyChargeCapture"/>
+                <attribute attribute-id="paydockCheckoutButtonZipMoneyFraud"/>
+                <attribute attribute-id="paydockCheckoutButtonZipMoneyFraudServiceID"/>
+                <attribute attribute-id="paydockCheckoutButtonAfterpayGatewayID"/>
+                <attribute attribute-id="paydockCheckoutButtonAfterpayChargeCapture"/>
+                <attribute attribute-id="paydockCheckoutButtonAfterpayFraud"/>
+                <attribute attribute-id="paydockCheckoutButtonAfterpayFraudServiceID"/>
+            </attribute-group>
+        </group-definitions>
+    </type-extension>
+</metadata>

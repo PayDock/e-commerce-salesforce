@@ -288,6 +288,8 @@ function createPaydockPaymentInstrument(lineItemCtnr, paymentMethodId, params) {
 
         if ('chargeId' in params) {
             paymentInstrument.custom.paydockChargeID = params.chargeId;
+
+            lineItemCtnr.custom.paydockChargeID = params.chargeId;
         }
 
         if ('chargeStatus' in params) {
@@ -312,6 +314,19 @@ function createPaydockPaymentInstrument(lineItemCtnr, paymentMethodId, params) {
 
         if ('paydock3DSToken' in params) {
           paymentInstrument.custom.paydock3DSToken = params.paydock3DSToken;
+        }
+
+        if ('paydockFraudID' in params) {
+          paymentInstrument.custom.paydockFraudID = params.paydockFraudID;
+          lineItemCtnr.custom.paydockFraudID = params.paydockFraudID;
+        }
+
+        if ('paydockFraudStatus' in params) {
+          paymentInstrument.custom.paydockFraudStatus = params.paydockFraudStatus;
+        }
+
+        if ('paydockCardDetails' in params) {
+          paymentInstrument.custom.paydockCardDetails = params.paydockCardDetails;
         }
     }
 
@@ -410,6 +425,23 @@ function isPaydockPaymentInstrumentEligibleForCancel(paymentInstrument) {
 }
 
 /**
+ * Checks if Paydock charge associated with the Payment Instrument in under the processing.
+ *
+ * @param {dw.order.PaymentInstrument} paymentInstrument - Paydock Payment Instrument
+ * @return {Boolean} - Verification result
+ */
+function isPaydockPaymentInstrumentUnderProcessing(paymentInstrument) {
+    // early returns
+    if (!isPaydockPaymentInstrument(paymentInstrument)) return false;
+
+    if (['inreview', 'pre_authentication_pending'].indexOf(paymentInstrument.custom.paydockChargeStatus) !== -1) return true;
+
+    if (['inreview'].indexOf(paymentInstrument.custom.paydockFraudStatus) !== -1) return true;
+
+    return false;
+}
+
+/**
  * Update Paydock Payment Instrument with the charge details.
  *
  * @param {dw.order.PaymentInstrument} paymentInstrument - Paydock Payment Instrument
@@ -444,6 +476,279 @@ function updatePaydockPaymentInstrumentWithChargeDetails(paymentInstrument, char
         paymentInstrument.custom.paydockCapturedAmount = (capturedAmount || autoCapturedAmount).toFixed(2);
         paymentInstrument.custom.paydockRefundedAmount = refundedAmount.toFixed(2);
     });
+}
+
+/**
+ * Update Paydock Payment Instrument with the notification details.
+ *
+ * @param {dw.order.PaymentInstrument} paymentInstrument - Paydock Payment Instrument
+ * @param {Object} notification - previously retrieved notification
+ * @return {void}
+ */
+function updatePaydockPaymentInstrumentWithNotificaionDetails(paymentInstrument, notification) {
+    var Transaction = require('dw/system/Transaction');
+    var paydockService = require('*/cartridge/scripts/paydock/services/paydockService');
+
+    // early returns
+    if (!isPaydockPaymentInstrument(paymentInstrument) || !notification || !notification.event || !notification.data) return;
+
+    var autoCapturedAmount = 0;
+    var capturedAmount = 0;
+    var refundedAmount = 0;
+    
+    for (var i = 0; i < notification.data.transactions.length; i++) {
+        var transaction = notification.data.transactions[i]; // shortcut
+
+        if (transaction.type === 'sale' && transaction.status === 'complete' && transaction.amount) autoCapturedAmount += transaction.amount;
+        if (transaction.type === 'capture' && transaction.status === 'complete' && transaction.amount) capturedAmount += transaction.amount;
+        if (transaction.type === 'refund' && transaction.status === 'complete' && transaction.amount) refundedAmount += transaction.amount;
+    }
+
+    Transaction.wrap(function() {
+        paymentInstrument.custom.paydockChargeStatus = notification.data.status;
+        paymentInstrument.custom.paydockCapturedAmount = (capturedAmount || autoCapturedAmount).toFixed(2);
+        paymentInstrument.custom.paydockRefundedAmount = refundedAmount.toFixed(2);
+    });
+}
+
+function updateOrderWithNotificationDetails(order, paymentInstrument, notification) {
+    var Transaction = require('dw/system/Transaction');
+    var Order = require('dw/order/Order');
+    var Logger = require('dw/system/Logger').getLogger('PAYDOCK', 'notification');
+    var paydockService = require('*/cartridge/scripts/paydock/services/paydockService');
+    var preferences = require('*/cartridge/config/preferences');
+
+    var err;
+    var chargeResult;
+
+    // early returns
+    if (
+        !order ||
+        !isPaydockPaymentInstrument(paymentInstrument)
+        || !notification
+        || !notification.event
+        || !notification.data
+    ) return;
+
+    // shortcuts
+    var event = notification.event;
+    var data = notification.data;
+
+    var autoCapturedAmount = 0;
+    var capturedAmount = 0;
+    var refundedAmount = 0;
+    
+    for (var i = 0; i < data.transactions.length; i++) {
+        var transaction = data.transactions[i]; // shortcut
+
+        if (transaction.type === 'sale' && transaction.status === 'complete' && transaction.amount) autoCapturedAmount += transaction.amount;
+        if (transaction.type === 'capture' && transaction.status === 'complete' && transaction.amount) capturedAmount += transaction.amount;
+        if (transaction.type === 'refund' && transaction.status === 'complete' && transaction.amount) refundedAmount += transaction.amount;
+    }
+
+    capturedAmount = capturedAmount || autoCapturedAmount;
+
+    Transaction.wrap(function () {
+        switch (event) {
+            case 'fraud_check_transaction_in_review_approved':
+                order.addNote('Fraud Notification', 'Fraud check transaction in review approved');
+                paymentInstrument.custom.paydockFraudStatus = 'complete';
+                break;
+            case 'transaction_success':
+                if ((data.transaction.type === 'capture' || data.transaction.type === 'sale') && data.transaction.status === 'complete') {
+                    order.addNote('Transaction Notification',
+                        data.amount === data.transaction.amount ?
+                            'Captured' :
+                            'Captured ' + data.transaction.amount + ' ' + data.transaction.currency
+                    );
+
+                    order.setPaymentStatus(
+                        paymentInstrument.paymentTransaction.amount.value == capturedAmount ?
+                            Order.PAYMENT_STATUS_PAID :
+                            Order.PAYMENT_STATUS_PARTPAID
+                    );
+
+                    order.custom.paydockCaptured = true;
+                }
+                break;
+            case 'transaction_failure':
+                order.addNote('Transaction Notification',
+                    (data.transaction.type === 'sale' && data.transaction.status === 'pending') ?
+                        'Authorized' :
+                        'Failed'
+                );
+                break;
+            case 'refund_success':
+                if (data.transaction.type === 'refund' && data.transaction.status === 'complete') {
+                    order.addNote('Transaction Notification',
+                        data.amount === data.transaction.amount ?
+                            'Refunded' :
+                            'Refunded ' + data.transaction.amount + ' ' + data.transaction.currency
+                    );
+
+                    order.setPaymentStatus(
+                        paymentInstrument.custom.paydockCapturedAmount == refundedAmount ?
+                            Order.PAYMENT_STATUS_PAID :
+                            Order.PAYMENT_STATUS_PARTPAID
+                    );
+
+                    order.custom.paydockRefunded = true;
+                }
+                break;
+            case 'refund_failure':
+                order.addNote('Transaction Notification', 'Refund failed');
+                break;
+            case 'refund_requested':
+                order.addNote('Transaction Notification', 'Refund requested');
+                break;
+            case 'standalone_fraud_check_in_review':
+                order.addNote('Fraud Notification', 'Standalone Fraud check in review');
+                paymentInstrument.custom.paydockFraudStatus = 'inreview';
+                break;
+            case 'standalone_fraud_check_success':
+                order.addNote('Fraud Notification', 'Standalone Fraud check success');
+                paymentInstrument.custom.paydockFraudStatus = 'complete';
+                break;
+            case 'standalone_fraud_check_failed':
+                order.addNote('Fraud Notification', 'Standalone Fraud check failed');
+                paymentInstrument.custom.paydockFraudStatus = 'failed';
+                break;
+            case 'standalone_fraud_check_in_review_declined':
+                order.addNote('Fraud Notification', 'Standalone Fraud check in review declined');
+                paymentInstrument.custom.paydockFraudStatus = 'declined';
+                break;
+            case 'fraud_check_in_review':
+                order.addNote('Fraud Notification', 'Fraud check in review');
+                paymentInstrument.custom.paydockFraudStatus = 'inreview';
+                break;
+            case 'fraud_check_in_review_async_approved':
+                order.addNote('Fraud Notification', 'Fraud check in review assync approved');
+                paymentInstrument.custom.paydockFraudStatus = 'complete';
+                break;
+            case 'fraud_check_in_review_async_declined':
+                order.addNote('Fraud Notification', 'Fraud check in review assync declined');
+                paymentInstrument.custom.paydockFraudStatus = 'declined';
+                break;
+            case 'fraud_check_transaction_in_review_async_approved':
+                order.addNote('Fraud Notification', 'Fraud check transaction in review assync approved');
+                paymentInstrument.custom.paydockFraudStatus = 'complete';
+                break;
+            case 'fraud_check_transaction_in_review_async_declined':
+                order.addNote('Fraud Notification', 'Fraud check transaction in review assync declined');
+                paymentInstrument.custom.paydockFraudStatus = 'declined';
+                break;
+            case 'fraud_check_success':
+                order.addNote('Fraud Notification', 'Fraud check success');
+                paymentInstrument.custom.paydockFraudStatus = 'complete';
+                break;
+            case 'fraud_check_failed':
+                order.addNote('Fraud Notification', 'Fraud check failed');
+                paymentInstrument.custom.paydockFraudStatus = 'failed';
+                break;
+            case 'fraud_check_transaction_in_review_declined':
+                order.addNote('Fraud Notification', 'Fraud check transaction in review declined');
+                paymentInstrument.custom.paydockFraudStatus = 'declined';
+                break;
+        }
+    });
+}
+
+function processStandAloneApproveNotification(order, paymentInstrument, notification) {
+  var Transaction = require('dw/system/Transaction');
+  var Order = require('dw/order/Order');
+  var Logger = require('dw/system/Logger').getLogger('PAYDOCK', 'notification');
+  var paydockService = require('*/cartridge/scripts/paydock/services/paydockService');
+  var preferences = require('*/cartridge/config/preferences');
+
+  var err;
+  var chargeResult;
+
+  // early returns
+  if (
+      !isPaydockPaymentInstrument(paymentInstrument)
+      || !notification
+      || !notification.event
+      || !notification.data
+      || empty(order)
+  ) return;
+
+  var paymentAmount = getNonGiftCertificateAmount(order);
+
+  var chargeReqObj = {
+    amount: paymentAmount.value.toString(),
+    currency: 'AUD',
+    // currency: paymentCurrency,
+    reference: order.orderNo,
+    customer: {
+      payment_source: {
+        gateway_id: preferences.paydock.paydockGatewayID
+      }
+    }
+  }
+
+  if (!empty(order.paymentInstrument.custom.paydockCustomerID)) {
+    chargeReqObj.customer_id = order.paymentInstrument.custom.paydockCustomerID;
+  }
+
+  if (preferences.paydock.paydock3DSType.value === 'inbuilt3DS') {
+    chargeReqObj._3ds = {
+      id: order.paymentInstrument.custom.paydockCharge3DSToken
+    }
+  }
+
+  if (preferences.paydock.paydock3DSFlow.value === 'ott'
+    && preferences.paydock.paydock3DSType.value !== 'inbuilt3DS'
+  ) {
+    chargeReqObj.token = oreder.paymentInstrument.custom.paydockToken;
+  }
+
+  if (preferences.paydock.paydock3DSType.value === 'standalone3DS'
+    && preferences.paydock.paydock3DSFlow.value === 'vault'
+  ) {
+    chargeReqObj._3ds_charge_id = order.paymentInstrument.custom.paydockCharge3DSToken
+  }
+
+  if (order.paymentInstrument.custom.paydockVaultToken) {
+    chargeReqObj.customer.payment_source.vault_token = order.paymentInstrument.custom.paydockVaultToken
+  }
+
+  addChargePayloadDetails(chargeReqObj, order);
+
+  try {
+    chargeResult = paydockService.charges.create(chargeReqObj, preferences.paydock.paydockChargeCapture);
+    var attachFraudResult = paydockService.charges.attachFraud(chargeResult.resource.data._id, {
+      fraud_charge_id: order.paymentInstrument.custom.paydockFraudID
+    });
+  } catch (e) {
+    var errorMessage = 'Failed to create charge or attach fraud  at Paydock.' + '\n' + e.message;
+    Logger.error(errorMessage);
+
+    err = e;
+  }
+
+  if (err) {
+    throw new Error(err.message);
+  } else {
+    Transaction.wrap(function () {
+        order.addNote('Paydock charge succeeded', 'Charge ' + chargeResult.resource.data._id);
+
+        if (chargeResult) {
+          order.paymentInstrument.custom.paydockChargeStatus = chargeResult.resource.data.status;
+    
+          if (chargeResult.resource.data._id) {
+            order.paymentInstrument.custom.paydockChargeID = chargeResult.resource.data._id;
+            order.paymentInstrument.paymentTransaction.setTransactionID(chargeResult.resource.data._id);
+          }
+      
+          if (chargeResult.resource.data.status === 'complete') {
+            order.setPaymentStatus(Order.PAYMENT_STATUS_PAID);
+          }
+    
+          // update Paydock Payment Instrument with charge details
+          updatePaydockPaymentInstrumentWithChargeDetails(order.paymentInstrument, chargeResult);
+        }
+    });
+  }
 }
 
 /**
@@ -744,7 +1049,7 @@ function createOrder(currentBasket) {
  */
 function refundPaydockCharge(chargeId, amount, order) {
     var Transaction = require('dw/system/Transaction');
-    var Logger = require('dw/system/Logger').getLogger('paydock', 'api.chargeRefund');
+    var Logger = require('dw/system/Logger').getLogger('PAYDOCK', 'api.chargeRefund');
     var paydockService = require('*/cartridge/scripts/paydock/services/paydockService');
 
     // early returns
@@ -763,8 +1068,14 @@ function refundPaydockCharge(chargeId, amount, order) {
             refundResult = paydockService.charges.refund(chargeId);
         }
     } catch (e) {
-        var errorMessage = 'Failed to refund charge ' + chargeId + ' at Paydock.' + '\n' + e.message;
+        var errorMessage = 'Failed to refund charge ' + chargeId + '.' + '\n' + e.message;
         Logger.error(errorMessage);
+
+        if (order) {
+            Transaction.wrap(function () {
+                order.addNote('Operation Notification', 'Refund failed. ' + '\n' + e.message);
+            });
+        }
 
         err = e;
     }
@@ -775,7 +1086,11 @@ function refundPaydockCharge(chargeId, amount, order) {
     else {
         if (order) {
             Transaction.wrap(function () {
-                order.addNote('Paydock refund succeeded', 'Charge ' + chargeId + ' refund requested.' + (amount ? ' Amount is ' + amount : ''));
+                order.addNote('Operation Notification', 
+                    amount ?
+                    'Refund for ' + amount + ' ' + order.currencyCode + ' requested. Charge ' + chargeId :
+                    'Refund requested. Charge ' + chargeId
+                );
             });
         }
     }
@@ -792,7 +1107,7 @@ function refundPaydockCharge(chargeId, amount, order) {
  */
 function refundPaydockCharges(order, amount) {
     var Transaction = require('dw/system/Transaction');
-    var Logger = require('dw/system/Logger').getLogger('paydock', 'api.chargeRefund');
+    var Logger = require('dw/system/Logger').getLogger('PAYDOCK', 'api.chargeRefund');
     var paydockService = require('*/cartridge/scripts/paydock/services/paydockService');
 
     var refundedResult = 0;
@@ -813,11 +1128,11 @@ function refundPaydockCharges(order, amount) {
                         amount: (amount ? amount : paymentInstrument.paymentTransaction.amount.value)
                     });
                 } catch (e) {
-                    var errorMessage = 'Failed to refund charge ' + chargeId + ' at Paydock.' + '\n' + e.message;
+                    var errorMessage = 'Failed to refund charge ' + chargeId + '.' + '\n' + e.message;
                     Logger.error(errorMessage);
 
                     Transaction.wrap(function () {
-                        order.addNote('Paydock refund failed', errorMessage);
+                        order.addNote('Operation Notification', 'Refund failed. ' + '\n' + e.message);
                     });
 
                     err = e;
@@ -829,7 +1144,7 @@ function refundPaydockCharges(order, amount) {
 
                 if (refundResult && !refundResult.error) {
                     Transaction.wrap(function () {
-                        order.addNote('Paydock refund succeeded', 'Charge ' + chargeId + ' refund requested.');
+                        order.addNote('Operation Notification', 'Refund requested. Charge ' + chargeId);
 
                         if (i === paydockPaymentInstruments.length - 1) {
                             order.custom.paydockRefunded = true;
@@ -874,8 +1189,14 @@ function capturePaydockCharge(chargeId, amount, order) {
             captureResult = paydockService.charges.capture(chargeId);
         }
     } catch (e) {
-        var errorMessage = 'Failed to capture charge ' + chargeId + ' at Paydock.' + '\n' + e.message;
+        var errorMessage = 'Failed to capture charge ' + chargeId + '.' + '\n' + e.message;
         Logger.error(errorMessage);
+
+        if (order) {
+            Transaction.wrap(function () {
+                order.addNote('Operation Notification', 'Capture failed. ' + '\n' + e.message);
+            });
+        }
 
         err = e;
     }
@@ -886,7 +1207,12 @@ function capturePaydockCharge(chargeId, amount, order) {
     else {
         if (order) {
             Transaction.wrap(function () {
-                order.addNote('Paydock capture succeeded', 'Charge ' + chargeId + ' capture requested.' + (amount ? ' Amount is ' + amount : ''));
+                order.addNote('Operation Notification',
+                    amount ?
+                        'Capture for ' + amount + ' ' + order.currencyCode + ' requested. Charge ' + chargeId :
+                        'Capture requested. Charge ' + chargeId
+                );
+
             });
         }
     }
@@ -904,7 +1230,7 @@ function capturePaydockCharge(chargeId, amount, order) {
 function capturePaydockCharges(order, amount) {
     var Order = require('dw/order/Order');
     var Transaction = require('dw/system/Transaction');
-    var Logger = require('dw/system/Logger').getLogger('paydock', 'api.chargeCapture');
+    var Logger = require('dw/system/Logger').getLogger('PAYDOCK', 'api.chargeCapture');
     var paydockService = require('*/cartridge/scripts/paydock/services/paydockService');
 
     var capturedResult = 0;
@@ -934,7 +1260,7 @@ function capturePaydockCharges(order, amount) {
                     Logger.error(errorMessage);
 
                     Transaction.wrap(function () {
-                        order.addNote('Paydock capture failed', errorMessage);
+                        order.addNote('Operation Notification', 'Capture failed. ' + '\n' + e.message);
                     });
 
                     err = e;
@@ -946,7 +1272,9 @@ function capturePaydockCharges(order, amount) {
 
                 if (captureResult && !captureResult.error) {
                     Transaction.wrap(function () {
-                        order.addNote('Paydock capture succeeded', 'Charge ' + chargeId + ' capture requested.');
+                        Transaction.wrap(function () {
+                            order.addNote('Operation Notification', 'Capture requested. Charge ' + chargeId);
+                        });
 
                         paymentInstrument.custom.paydockChargeStatus = captureResult.resource.data.status;
 
@@ -1005,10 +1333,10 @@ function addChargePayloadDetails(chargePayload, lineItemCtnr) {
 
         if (billingAddress.address1) paymentSource.address_line1 = billingAddress.address1;
         if (billingAddress.address2) paymentSource.address_line2 = billingAddress.address2;
-        if (billingAddress.city) paymentSource.city = billingAddress.city;
-        if (billingAddress.stateCode) paymentSource.state = billingAddress.stateCode;
-        if (billingAddress.postalCode) paymentSource.postcode = billingAddress.postalCode;
-        if (billingAddress.countryCode && billingAddress.countryCode.value) paymentSource.country = billingAddress.countryCode.value;
+        if (billingAddress.city) paymentSource.address_city = billingAddress.city;
+        if (billingAddress.stateCode) paymentSource.address_state = billingAddress.stateCode;
+        if (billingAddress.postalCode) paymentSource.address_postcode = billingAddress.postalCode;
+        if (billingAddress.countryCode && billingAddress.countryCode.value) paymentSource.address_country = billingAddress.countryCode.value;
     }
 
     // add details of the shipping address
@@ -1019,6 +1347,15 @@ function addChargePayloadDetails(chargePayload, lineItemCtnr) {
         if (shippingAddress.countryCode && shippingAddress.countryCode.value) shipping.address_country = shippingAddress.countryCode.value;
         if (shippingAddress.city) shipping.address_city = shippingAddress.city;
         if (shippingAddress.postalCode) shipping.address_postcode = shippingAddress.postalCode;
+
+        // add contact details
+        if (shippingAddress.firstName || shippingAddress.lastName || shippingAddress.phone) {
+            shipping.contact = {};
+
+            if (shippingAddress.firstName) shipping.contact.first_name = shippingAddress.firstName;
+            if (shippingAddress.lastName) shipping.contact.last_name = shippingAddress.lastName;
+            if (shippingAddress.phone) shipping.contact.phone = shippingAddress.phone;
+        }
     }
 
     // add details of the shipping method and shipping price
@@ -1114,8 +1451,7 @@ function initializePaydockChargeWallet(currentBasket, gatewayId, chargeCapture, 
     // add fraud details
     if (fraudEnabled && fraudServiceID) {
         chargeWalletPayload.fraud = {
-            service_id: fraudServiceID,
-            mode: 'active'
+            service_id: fraudServiceID
         };
     }
 
@@ -1126,7 +1462,7 @@ function initializePaydockChargeWallet(currentBasket, gatewayId, chargeCapture, 
         var errorMessage = 'Failed to initialize charge for wallet payments at Paydock. Gateway ID is ' + gatewayId + '.\n' + e.message;
         Logger.error(errorMessage);
 
-        chargeResult = null;
+        throw new Error(e.message);
     }
 
     if (chargeResult && !chargeResult.error) {
@@ -1163,8 +1499,14 @@ function cancelCharge(chargeId, order) {
     try {
         cancelResult = paydockService.charges.cancel(chargeId);
     } catch (e) {
-        var errorMessage = 'Failed to cancel charge ' + chargeId + ' at Paydock.' + '\n' + e.message;
+        var errorMessage = 'Failed to cancel charge ' + chargeId + '.' + '\n' + e.message;
         Logger.error(errorMessage);
+
+        if (order) {
+            Transaction.wrap(function () {
+                order.addNote('Operation Notification', 'Cancel failed.' + '\n' + e.message);
+            });
+        }
 
         err = e;
     }
@@ -1175,7 +1517,7 @@ function cancelCharge(chargeId, order) {
     else {
         if (order) {
             Transaction.wrap(function () {
-                order.addNote('Paydock cancellation succeeded', 'Charge ' + chargeId + ' cancellation requested.');
+                order.addNote('Operation Notification', 'Cancel requested. Charge ' + chargeId);
             });
         }
     }
@@ -1190,7 +1532,7 @@ function cancelCharge(chargeId, order) {
  * @returns {Boolean} Success or not
  */
 function archiveCharge(chargeId) {
-    var Logger = require('dw/system/Logger').getLogger('paydock', 'api.archiveCancel');
+    var Logger = require('dw/system/Logger').getLogger('PAYDOCK', 'api.archiveCancel');
     var paydockService = require('*/cartridge/scripts/paydock/services/paydockService');
 
     // early returns
@@ -1202,8 +1544,14 @@ function archiveCharge(chargeId) {
     try {
         archiveResult = paydockService.charges.archive(chargeId);
     } catch (e) {
-        var errorMessage = 'Failed to archive charge ' + chargeId + ' at Paydock.' + '\n' + e.message;
+        var errorMessage = 'Failed to archive charge ' + chargeId + '.' + '\n' + e.message;
         Logger.error(errorMessage);
+
+        if (order) {
+            Transaction.wrap(function () {
+                order.addNote('Operation Notification', 'Archive failed.' + '\n' + e.message);
+            });
+        }
 
         err = e;
     }
@@ -1217,6 +1565,78 @@ function archiveCharge(chargeId) {
     }
 
     return false;
+}
+
+/**
+ * Attempts to process a Paydock Notification
+ * 
+ * @param {Object} notification - notification
+ * @returns {void}
+ */
+function processNotification(notification) {
+    var OrderMgr = require('dw/order/OrderMgr');
+
+    var order;
+
+    // early returns
+    if (!notification) return;
+
+    // shortcuts
+    var event = notification.event;
+    var data = notification.data;
+
+    // early returns
+    if (!event || !data) throw new Error('Corrupted Notification object');
+
+    var chargeId = data._id;
+    
+    // get Order
+    if (event === 'standalone_fraud_check_in_review_approved') {
+      order = OrderMgr.queryOrder('custom.paydockFraudID = {0}', chargeId);
+    } else {
+      order = OrderMgr.queryOrder('custom.paydockChargeID = {0}', chargeId);
+    }
+
+    // no Order
+    if (!order) return;
+
+    // get Paydock Payment Instrument
+    var paydockPI = getPaydockPaymentInstrument(order);
+
+    // no Paydock Payment Instrument
+    if (!paydockPI) return;
+
+    switch (event) {
+        case 'transaction_success':
+        case 'transaction_failure':
+        case 'refund_success':
+        case 'refund_failure':
+            updatePaydockPaymentInstrumentWithNotificaionDetails(paydockPI, notification);
+            updateOrderWithNotificationDetails(order, paydockPI, notification);
+            break;
+        case 'refund_requested':
+            updateOrderWithNotificationDetails(order, paydockPI, notification);
+            break;
+        case 'standalone_fraud_check_in_review_async_approved':
+        case 'standalone_fraud_check_in_review_approved':
+            processStandAloneApproveNotification(order, paydockPI, notification);
+            break;
+        case 'standalone_fraud_check_in_review':
+        case 'standalone_fraud_check_success':
+        case 'standalone_fraud_check_failed':
+        case 'standalone_fraud_check_in_review_declined':
+        case 'fraud_check_in_review':
+        case 'fraud_check_in_review_async_approved':
+        case 'fraud_check_in_review_async_declined':
+        case 'fraud_check_transaction_in_review_async_approved':
+        case 'fraud_check_transaction_in_review_async_declined':
+        case 'fraud_check_success':
+        case 'fraud_check_failed':
+        case 'fraud_check_transaction_in_review_approved':
+        case 'fraud_check_transaction_in_review_declined':
+            updateOrderWithNotificationDetails(order, paydockPI, notification);
+            break;
+    }
 }
 
 module.exports = {
@@ -1235,7 +1655,9 @@ module.exports = {
     isPaydockPaymentInstrumentEligibleForCapture: isPaydockPaymentInstrumentEligibleForCapture,
     isPaydockPaymentInstrumentEligibleForRefund: isPaydockPaymentInstrumentEligibleForRefund,
     isPaydockPaymentInstrumentEligibleForCancel: isPaydockPaymentInstrumentEligibleForCancel,
+    isPaydockPaymentInstrumentUnderProcessing: isPaydockPaymentInstrumentUnderProcessing,
     updatePaydockPaymentInstrumentWithChargeDetails: updatePaydockPaymentInstrumentWithChargeDetails,
+    updatePaydockPaymentInstrumentWithNotificaionDetails: updatePaydockPaymentInstrumentWithNotificaionDetails,
     getNewPaydockOrderNumber: getNewPaydockOrderNumber,
     getReservedPaydockOrderNumber: getReservedPaydockOrderNumber,
     getNonGiftCertificateAmount: getNonGiftCertificateAmount,
@@ -1249,5 +1671,6 @@ module.exports = {
     initializePaydockChargeWallet: initializePaydockChargeWallet,
     cancelCharge: cancelCharge,
     archiveCharge: archiveCharge,
-    addChargePayloadDetails: addChargePayloadDetails
+    addChargePayloadDetails: addChargePayloadDetails,
+    processNotification: processNotification
 }

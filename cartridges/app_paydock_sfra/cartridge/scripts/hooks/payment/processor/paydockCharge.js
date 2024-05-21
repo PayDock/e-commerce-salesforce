@@ -69,6 +69,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
   var token = paymentInformation.paydockToken;
   var amount = paydockCheckoutHelper.getNonGiftCertificateAmount(currentBasket).value;
   var currency = currentBasket.currencyCode;
+  session.privacy.fraudInreview = false;
   
   try {
     if (req.currentCustomer.raw.authenticated
@@ -102,6 +103,21 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
           vaultType: paymentSource.vault_type
         }
 
+        if (
+          paymentSource.card_number_bin
+          && paymentSource.card_number_last4
+          && paymentSource.expire_month
+          && paymentSource.expire_year
+        ) {
+          paymentInstrumentObj.paydockCardDetails = paymentSource.card_number_bin
+            + '-'
+            + paymentSource.card_number_last4
+            + '_'
+            + paymentSource.expire_month
+            + '/'
+            + paymentSource.expire_year
+        }
+
         if (preferences.paydock.paydockSaveCardMethod.value === 'customerWithGatewayID'
           && paymentInformation.paydockSaveCard
           && preferences.paydock.paydockFraudType.value === 'disabledFraud'
@@ -112,6 +128,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
             first_name: customer.firstName,
             last_name: customer.lastName,
             email: customer.email,
+            phone: billingAddress.phone,
             payment_source: {
               address_country: billingAddress.countryCode.value,
               address_city: billingAddress.city,
@@ -136,6 +153,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
             first_name: customer.firstName,
             last_name: customer.lastName,
             email: customer.email,
+            phone: billingAddress.phone,
             payment_source: {
               address_country: billingAddress.countryCode.value,
               address_city: billingAddress.city,
@@ -177,6 +195,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
           token: token,
           vault_type: "session"
         }
+        paydockCheckoutHelper.addChargePayloadDetails(vaultsReqObj, currentBasket);
         vaultResponse = paydockService.vaults.create(vaultsReqObj);
         paymentSource = vaultResponse.resource.data;
   
@@ -199,7 +218,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
         && preferences.paydock.paydock3DSFlow.value === 'vault'
     ) { 
       var customer = currentBasket.getBillingAddress();
-      var fraudResult = paydockService.charges.fraud({
+      var fraudReqObj = {
         amount: amount,
         currency: "AUD",
         // currency: currency,
@@ -213,19 +232,27 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
         fraud: {
             service_id: preferences.paydock.paydockFraudServiceID
         }
-      });
+      };
+      paydockCheckoutHelper.addChargePayloadDetails(fraudReqObj, currentBasket);
+      var fraudResult = paydockService.charges.fraud(fraudReqObj);
       session.privacy.fraudID = fraudResult.resource.data._id;
+      session.privacy.fraudInreview = fraudResult.resource.data.status === 'inreview';
+      paymentInstrumentObj.paydockFraudID = fraudResult.resource.data._id;
+      paymentInstrumentObj.paydockFraudStatus = fraudResult.resource.data.status
     }
 
     if (preferences.paydock.paydock3DSType.value === 'inbuilt3DS'
         && empty(paymentInstrumentObj.customerID)
     ) { 
+      var customer = currentBasket.getBillingAddress();
       var preAuthReqObj = {
         amount: amount,
         currency: "AUD",
         // currency: currency,
         customer: {
-            payment_source: {
+          first_name: customer.firstName,
+          last_name: customer.lastName,
+          payment_source: {
                 gateway_id: preferences.paydock.paydockGatewayID
             }
         },
@@ -240,6 +267,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
         preAuthReqObj.customer.payment_source.vault_token = paymentInstrumentObj.vaultToken
       }
 
+      paydockCheckoutHelper.addChargePayloadDetails(preAuthReqObj, currentBasket);
       var result = paydockService.charges.preAuth(preAuthReqObj);
       session.privacy.threeDSChargeID = result.resource.data._id
       paymentInstrumentObj.paydock3DSToken = result.resource.data._3ds.token;
@@ -257,13 +285,14 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
     ) { 
       var customer = currentBasket.getBillingAddress();
       var date = new Date().toISOString();
-      var result = paydockService.charges.standalone3DS({
+      var standAloneReqObj = {
         amount: amount,
         currency: "AUD",
         // currency: currency,
         customer: {
             first_name: customer.firstName,
             last_name: customer.lastName,
+            phone: customer.phone,
             payment_source: {
                 vault_token: paymentInstrumentObj.vaultToken,
                 gateway_id: preferences.paydock.paydockGatewayID
@@ -276,7 +305,8 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
                 date: date
             }
         }
-      });
+      };
+      var result = paydockService.charges.standalone3DS(standAloneReqObj)
       session.privacy.threeDSChargeID = result.resource.data._3ds.id;
       paymentInstrumentObj.paydock3DSToken = result.resource.data._3ds.token;
     }
@@ -386,10 +416,14 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
       }
 
       paydockCheckoutHelper.addChargePayloadDetails(chargeReqObj, order);
-      chargeResult = paydockService.charges.create(chargeReqObj, preferences.paydock.paydockChargeCapture);
+
+      if (!session.privacy.fraudInreview) {
+        chargeResult = paydockService.charges.create(chargeReqObj, preferences.paydock.paydockChargeCapture);
+      }
 
       if (preferences.paydock.paydockFraudType.value === 'standaloneFraud'
           && preferences.paydock.paydock3DSFlow.value === 'vault'
+          && !session.privacy.fraudInreview
       ) {
         var attachFraudResult = paydockService.charges.attachFraud(chargeResult.resource.data._id, {
           fraud_charge_id: session.privacy.fraudID
@@ -412,6 +446,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
               first_name: customer.profile.firstName,
               last_name: customer.profile.lastName,
               email: customer.profile.email,
+              phone: billingAddress.phone,
               payment_source: {
                 address_country: billingAddress.countryCode.value,
                 address_city: billingAddress.city,
@@ -431,6 +466,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
               first_name: customer.profile.firstName,
               last_name: customer.profile.lastName,
               email: customer.profile.email,
+              phone: billingAddress.phone,
               payment_source: {
                 address_country: billingAddress.countryCode.value,
                 address_city: billingAddress.city,
@@ -469,19 +505,28 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
   if (!error) {
     Transaction.wrap(function () {
       paymentInstrument.paymentTransaction.paymentProcessor = paymentProcessor;
-      paymentInstrument.custom.paydockChargeStatus = chargeResult.resource.data.status;
 
-      if (chargeResult.resource.data._id) {
-        paymentInstrument.custom.paydockChargeID = chargeResult.resource.data._id;
-        paymentInstrument.paymentTransaction.setTransactionID(chargeResult.resource.data._id);
+      if (request.httpParameterMap.threeDSToken && request.httpParameterMap.threeDSToken.stringValue) {
+        paymentInstrument.custom.paydockCharge3DSToken = request.httpParameterMap.threeDSToken.stringValue;
       }
+
+      if (chargeResult) {
+        paymentInstrument.custom.paydockChargeStatus = chargeResult.resource.data.status;
   
-      if (chargeResult.resource.data.status === 'complete') {
-        order.setPaymentStatus(Order.PAYMENT_STATUS_PAID);
+        if (chargeResult.resource.data._id) {
+          paymentInstrument.custom.paydockChargeID = chargeResult.resource.data._id;
+          order.custom.paydockChargeID = chargeResult.resource.data._id;
+          order.custom.paydockPaymentMethod = paymentInstrument.getPaymentMethod();
+          paymentInstrument.paymentTransaction.setTransactionID(chargeResult.resource.data._id);
+        }
+    
+        if (chargeResult.resource.data.status === 'complete') {
+          order.setPaymentStatus(Order.PAYMENT_STATUS_PAID);
+        }
+  
+        // update Paydock Payment Instrument with charge details
+        paydockCheckoutHelper.updatePaydockPaymentInstrumentWithChargeDetails(paymentInstrument, chargeResult);
       }
-
-      // update Paydock Payment Instrument with charge details
-      paydockCheckoutHelper.updatePaydockPaymentInstrumentWithChargeDetails(paymentInstrument, chargeResult);
     });
   }
 
@@ -490,6 +535,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
 
 function savePaymentInformation(req, basket, billingData) {
   var CustomerMgr = require('dw/customer/CustomerMgr');
+  var collections = require('*/cartridge/scripts/util/collections');
 
   if (req.currentCustomer.raw.authenticated
     && req.currentCustomer.raw.registered
@@ -500,12 +546,18 @@ function savePaymentInformation(req, basket, billingData) {
     var customer = CustomerMgr.getCustomerByCustomerNumber(
         req.currentCustomer.profile.customerNo
     );
-
     var wallet = customer.getProfile().getWallet();
-
     var paymentInstr = basket.paymentInstrument;
+    var storedPaymentCollection = wallet.getPaymentInstruments(billingData.paymentMethod.value);
+    var alreadyExistingPaymentInstrument = collections.find(storedPaymentCollection, function (item) {
+      return item.custom.paydockCardDetails === paymentInstr.custom.paydockCardDetails;
+    });
 
     Transaction.wrap(function () {
+      if (alreadyExistingPaymentInstrument) {
+        wallet.removePaymentInstrument(alreadyExistingPaymentInstrument)
+      }
+
       var storedPaymentInstrument = wallet.createPaymentInstrument(billingData.paymentMethod.value);
 
       storedPaymentInstrument.setCreditCardHolder(
@@ -530,6 +582,10 @@ function savePaymentInformation(req, basket, billingData) {
 
       if (paymentInstr.custom.paydockCustomerID) {
         storedPaymentInstrument.custom.paydockCustomerID = paymentInstr.custom.paydockCustomerID;
+      }
+
+      if (paymentInstr.custom.paydockCardDetails) {
+        storedPaymentInstrument.custom.paydockCardDetails = paymentInstr.custom.paydockCardDetails;
       }
     });
   }
