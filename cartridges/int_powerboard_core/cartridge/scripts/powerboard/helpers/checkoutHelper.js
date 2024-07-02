@@ -1093,7 +1093,7 @@ function createOrder(currentBasket) {
  * 
  * @param {String} chargeId - Charge ID
  * @param {Number} amount - amount to be refunded
- * * @param {dw.order.Order} order - Order optional
+ * @param {dw.order.Order} order - Order optional
  * @returns {Object|null} Operation result in case of success, null otherwise
  */
 function refundPowerboardCharge(chargeId, amount, order) {
