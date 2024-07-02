@@ -5,15 +5,6 @@
 </isscript>
 
 <div class="tab-pane ${isActive ? 'active' : ''} powerboard-checkout-button-zipmoney-content" id="powerboard-checkout-button-zipmoney-content" content-id="${paymentOption.ID}" role="tabpanel" data-dwfrm-name="${pdict.forms.billingForm.powerboardToken.htmlName}">
-    <div style="text-align: center; margin-bottom: 12px;">
-        <img class="powerboard-option"
-            src="${URLUtils.staticURL('/images/powerboard.png')}"
-            width="260px"
-            alt="${paymentOption.name}"
-            title="${paymentOption.name}"
-        />
-    </div>
-
     <fieldset class="payment-form-fields">
         <!--- payment method is Checkout Button ZipMoney --->
         <input type="hidden" class="form-control"

@@ -6,6 +6,7 @@ var Order = require('dw/order/Order');
 var PaymentTransaction = require('dw/order/PaymentTransaction');
 var Resource = require('dw/web/Resource');
 var Site = require('dw/system/Site');
+var PaymentMgr = require('dw/order/PaymentMgr');
 
 var preferences = require('*/cartridge/config/preferences');
 var array = require('*/cartridge/scripts/util/array');
@@ -220,8 +221,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
       var customer = currentBasket.getBillingAddress();
       var fraudReqObj = {
         amount: amount,
-        currency: "AUD",
-        // currency: currency,
+        currency: currency,
         customer: {
           first_name: customer.firstName,
           last_name: customer.lastName,
@@ -247,8 +247,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
       var customer = currentBasket.getBillingAddress();
       var preAuthReqObj = {
         amount: amount,
-        currency: "AUD",
-        // currency: currency,
+        currency: currency,
         customer: {
           first_name: customer.firstName,
           last_name: customer.lastName,
@@ -287,8 +286,7 @@ function Handle(basket, paymentInformation, paymentMethodID, req) {
       var date = new Date().toISOString();
       var standAloneReqObj = {
         amount: amount,
-        currency: "AUD",
-        // currency: currency,
+        currency: currency,
         customer: {
             first_name: customer.firstName,
             last_name: customer.lastName,
@@ -355,8 +353,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
       )) {
         chargeReqObj = {
           amount: paymentAmount,
-          currency: 'AUD',
-          // currency: paymentCurrency,
+          currency: paymentCurrency,
           reference: orderNumber,
           customer_id: paymentInstrument.custom.powerboardCustomerID
         }
@@ -372,8 +369,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
     } else {
       chargeReqObj = {
         amount: paymentAmount,
-        currency: 'AUD',
-        // currency: paymentCurrency,
+        currency: paymentCurrency,
         reference: orderNumber,
         customer: {
           first_name: order.billingAddress.firstName,
@@ -516,7 +512,8 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
         if (chargeResult.resource.data._id) {
           paymentInstrument.custom.powerboardChargeID = chargeResult.resource.data._id;
           order.custom.powerboardChargeID = chargeResult.resource.data._id;
-          order.custom.powerboardPaymentMethod = paymentInstrument.getPaymentMethod();
+          var paymentMethod = PaymentMgr.getPaymentMethod(paymentInstrument.getPaymentMethod());
+          order.custom.powerboardPaymentMethod = paymentMethod.getName();
           paymentInstrument.paymentTransaction.setTransactionID(chargeResult.resource.data._id);
         }
     

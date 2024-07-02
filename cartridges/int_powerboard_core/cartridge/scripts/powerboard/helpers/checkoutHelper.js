@@ -366,6 +366,30 @@ function isPowerboardPaymentInstrumentEligibleForCapture(paymentInstrument) {
 }
 
 /**
+ * Returns the maximum amount the capture may be requested for the PowerBoard Payment Instrument.
+ *
+ * @param {dw.order.PaymentInstrument} paymentInstrument - PowerBoard Payment Instrument
+ * @return {Number|null} - The amount
+ */
+function getPowerboardPaymentInstrumentCaptureAmount(paymentInstrument) {
+    // early returns
+    if (
+        !isPowerboardPaymentInstrumentEligibleForCapture(paymentInstrument) ||
+        !paymentInstrument.paymentTransaction.amount.available
+    ) return null;
+
+    // data normalization
+    var capturedAmount = paymentInstrument.custom.powerboardCapturedAmount;
+    capturedAmount = !empty(capturedAmount) ? Number(capturedAmount) : 0;
+    capturedAmount = !isNaN(capturedAmount) ? capturedAmount : 0;
+
+    var maxCaptureAmount = paymentInstrument.paymentTransaction.amount.value - capturedAmount;
+    maxCaptureAmount = new dw.value.Money(maxCaptureAmount, paymentInstrument.paymentTransaction.amount.currencyCode);
+
+    return maxCaptureAmount.value;
+}
+
+/**
  * Checks if Powerboard Payment Instrument is eligible to request charge refund.
  *
  * @param {dw.order.PaymentInstrument} paymentInstrument - Powerboard Payment Instrument
@@ -398,6 +422,34 @@ function isPowerboardPaymentInstrumentEligibleForRefund(paymentInstrument) {
     }
 
     return false;
+}
+
+/**
+ * Returns the maximum amount the refund may be requested for the PowerBoard Payment Instrument.
+ *
+ * @param {dw.order.PaymentInstrument} paymentInstrument - PowerBoard Payment Instrument
+ * @return {Number|null} - The amount
+ */
+function getPowerboardPaymentInstrumentRefundAmount(paymentInstrument) {
+    // early returns
+    if (
+        !isPowerboardPaymentInstrumentEligibleForRefund(paymentInstrument) ||
+        !paymentInstrument.paymentTransaction.amount.available
+    ) return null;
+
+    // data normalization
+    var capturedAmount = paymentInstrument.custom.powerboardCapturedAmount;
+    capturedAmount = !empty(capturedAmount) ? Number(capturedAmount) : 0;
+    capturedAmount = !isNaN(capturedAmount) ? capturedAmount : 0;
+
+    var refundedAmount = paymentInstrument.custom.powerboardRefundedAmount;
+    refundedAmount = !empty(refundedAmount) ? Number(refundedAmount) : 0;
+    refundedAmount = !isNaN(refundedAmount) ? refundedAmount : 0;
+
+    var maxRefundAmount = capturedAmount >= refundedAmount ? capturedAmount - refundedAmount : 0;
+    maxRefundAmount = new dw.value.Money(maxRefundAmount, paymentInstrument.paymentTransaction.amount.currencyCode);
+
+    return maxRefundAmount.value;
 }
 
 /**
@@ -676,8 +728,7 @@ function processStandAloneApproveNotification(order, paymentInstrument, notifica
 
   var chargeReqObj = {
     amount: paymentAmount.value.toString(),
-    currency: 'AUD',
-    // currency: paymentCurrency,
+    currency: paymentAmount.currencyCode,
     reference: order.orderNo,
     customer: {
       payment_source: {
@@ -876,8 +927,7 @@ function getCheckoutButtonAfterpayMeta(lineItemCtnr) {
     if (billingAddress) {
         meta = {
             amount: amount.value,
-            // currency: lineItemCtnr.getCurrencyCode(),
-            currency: 'AUD',
+            currency: lineItemCtnr.getCurrencyCode(),
             email: lineItemCtnr.customerEmail,
             first_name: billingAddress.firstName,
             last_name: billingAddress.lastName,
@@ -928,8 +978,7 @@ function getCheckoutButtonZipMoneyMeta(lineItemCtnr) {
         tokenize: true,
         charge: {
             amount: amount.value.toString(),
-            // currency: lineItemCtnr.getCurrencyCode(),
-            currency: 'AUD',
+            currency: lineItemCtnr.getCurrencyCode(),
             items: []
         }
     };
@@ -1652,7 +1701,9 @@ module.exports = {
     removePowerboardPaymentInstruments: removePowerboardPaymentInstruments,
     createPowerboardPaymentInstrument: createPowerboardPaymentInstrument,
     isPowerboardPaymentInstrumentEligibleForCapture: isPowerboardPaymentInstrumentEligibleForCapture,
+    getPowerboardPaymentInstrumentCaptureAmount: getPowerboardPaymentInstrumentCaptureAmount,
     isPowerboardPaymentInstrumentEligibleForRefund: isPowerboardPaymentInstrumentEligibleForRefund,
+    getPowerboardPaymentInstrumentRefundAmount: getPowerboardPaymentInstrumentRefundAmount,
     isPowerboardPaymentInstrumentEligibleForCancel: isPowerboardPaymentInstrumentEligibleForCancel,
     isPowerboardPaymentInstrumentUnderProcessing: isPowerboardPaymentInstrumentUnderProcessing,
     updatePowerboardPaymentInstrumentWithChargeDetails: updatePowerboardPaymentInstrumentWithChargeDetails,

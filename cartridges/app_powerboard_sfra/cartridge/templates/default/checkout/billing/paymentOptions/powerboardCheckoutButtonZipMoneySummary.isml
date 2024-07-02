@@ -16,6 +16,7 @@
             <isif condition="${typeof payment.meta !== 'undefined' && payment.meta}">
                 data-meta="<isprint value="${JSON.stringify(payment.meta)}" encoding="on" />"
             </isif>
+            data-env="${pdict.powerboardEnvironment}"
         >
             <svg viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M1.57138 21.8984L2.18053 26.8613H23.5065L22.8087 21.1777H12.8655L12.7786 20.4734L21.937 14.0736L21.3251 9.10059H0L0.697879 14.7842H10.6575L10.7453 15.4949L1.57138 21.8984Z" fill="#1A0826"></path>

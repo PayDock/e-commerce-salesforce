@@ -21,17 +21,17 @@ server.append(
 
         if (preferences.powerboard.powerboard3DSFlow.value === 'ott'
         ) {
-          gatewayID = preferences.powerboard.powerboardGatewayID
+          gatewayID = preferences.powerboard.powerboardGatewayID;
         }
 
         var schemas = preferences.powerboard.powerboardCardScheme;
-        var tempArr = []
+        var tempArr = [];
 
         schemas.forEach(function (el) {
-          tempArr.push(el.toLowerCase())
+          tempArr.push(el.toLowerCase());
         })
 
-        var saveCard = preferences.powerboard.powerboardEnableSaveCard && preferences.powerboard.powerboard3DSFlow.value === 'vault'
+        var saveCard = preferences.powerboard.powerboardEnableSaveCard && preferences.powerboard.powerboard3DSFlow.value === 'vault';
 
         res.setViewData({
           powerboardPublicAPIKey: preferences.powerboard.powerboardPublicAPIKey,
@@ -41,7 +41,8 @@ server.append(
           selectedPowerboardPaymentInstrument: selectedPowerboardPaymentInstrument,
           powerboard3DSType: preferences.powerboard.powerboard3DSType.value,
           powerboard3DSFlow: preferences.powerboard.powerboard3DSFlow.value,
-          powerboardCardScheme: tempArr.join(',')
+          powerboardCardScheme: tempArr.join(','),
+          powerboardEnvironment: preferences.powerboard.powerboardEnvironment
         });
 
         return next();

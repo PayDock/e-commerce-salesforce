@@ -6,9 +6,23 @@
 
 <li class="nav-item" data-method-id="${paymentOption.ID}">
     <a class="nav-link powerboard-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#powerboard-content" role="tab">
-        <label>
-            ${paymentOption.name}
-        </label>
+        <div>
+            <img class="powerboard-option-logo"
+                src="${URLUtils.staticURL('/images/creditCard.png')}"
+                height="31"
+                alt="${paymentOption.name}"
+                title="${paymentOption.name}"
+            />
+            <label>
+                ${paymentOption.name}
+            </label>
+        </div>
+        <img class="powerboard-option"
+            src="${URLUtils.staticURL('/images/powerboard.png')}"
+            width="235px"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
     </a>
 </li>
 

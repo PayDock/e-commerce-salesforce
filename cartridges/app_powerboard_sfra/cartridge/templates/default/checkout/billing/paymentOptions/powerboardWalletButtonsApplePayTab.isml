@@ -6,6 +6,12 @@
 
 <li class="nav-item" data-method-id="${paymentOption.ID}">
     <a class="nav-link powerboard-wallet-buttons-apple-pay-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#powerboard-wallet-buttons-apple-pay-content" role="tab">
+        <img class="powerboard-wallet-buttons-apple-pay-option"
+            src="${paymentOption.image || URLUtils.staticURL('/images/ApplePay.png')}"
+            height="20"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
         <label>
             ${paymentOption.name}
         </label>

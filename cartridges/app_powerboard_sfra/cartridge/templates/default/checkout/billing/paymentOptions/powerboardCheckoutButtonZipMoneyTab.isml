@@ -6,6 +6,12 @@
 
 <li class="nav-item" data-method-id="${paymentOption.ID}">
     <a class="nav-link powerboard-checkout-button-zipmoney-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#powerboard-checkout-button-zipmoney-content" role="tab">
+        <img class="powerboard-checkout-button-zipmoney-option"
+            src="${paymentOption.image || URLUtils.staticURL('/images/Zip.svg')}"
+            height="25"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
         <label>
             ${paymentOption.name}
         </label>

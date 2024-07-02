@@ -1,0 +1,35 @@
+<iscontent type="text/html" charset="UTF-8" compact="true">
+
+<isinclude url="${URLUtils.url('SiteNavigationBar-IncludeFrameTop','SelectedMenuItem',pdict.SelectedMenuItem,'CurrentMenuItemId',pdict.CurrentMenuItemId)}">
+
+<h4 class="dw-nc-text-heading dw-nc-text-heading dw-nc-text-brand" style="margin-top: 20px;">
+  ${Resource.msg('powerboard.notifications.operations.title','powerboardbm', null)}
+</h4>
+
+<form class="powerboard-notifications-operations" id="powerboard-notifications-operations"
+  action="${URLUtils.url('PowerBoardBM-HandleNotifications')}" method="POST">
+  
+  <table width="100%" cellspacing="10px" cellpadding="0" border="0">
+    <caption style="text-align: left;">${Resource.msg('powerboard.notifications.operations.info','powerboardbm', null)}</caption>
+    <tbody>
+      <tr>
+        <th style="width: 40%;" align="left">${Resource.msg('powerboard.notifications.create.all.title','powerboardbm', null)}</th>
+        <td colspan="2" style="width: 60%" align="right"><button type="submit" name="operation" value="create" class="button">${Resource.msg('powerboard.notifications.operation.submit','powerboardbm', null)}</button></td>
+      </tr>
+      <tr>
+        <th style="width: 40%;" align="left">${Resource.msg('powerboard.notifications.delete.all.title','powerboardbm', null)}</th>
+        <td colspan="2" style="width: 60%" align="right"><button type="submit" name="operation" value="delete" class="button">${Resource.msg('powerboard.notifications.operation.submit','powerboardbm', null)}</button></td>
+      </tr>
+      <tr>
+        <th style="width: 40%;" align="left">${Resource.msg('powerboard.notifications.search.title','powerboardbm', null)}</th>
+        <td colspan="2" style="width: 60%" align="right"><button type="submit" name="operation" value="search" class="button">${Resource.msg('powerboard.notifications.operation.submit','powerboardbm', null)}</button></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p class="powerboard-operations-submit-result"></p>
+</form>
+
+<script type="text/javascript" src="${URLUtils.staticURL('js/powerboardbm.js')}"></script>
+
+<isinclude url="${URLUtils.url('SiteNavigationBar-IncludeFrameBottom')}">

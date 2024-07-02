@@ -270,6 +270,22 @@
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
+            <attribute-definition attribute-id="powerboardEnvironment">
+                <display-name xml:lang="x-default">Environment to connect</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>true</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Sandbox</display>
+                        <value>sandbox</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Production</display>
+                        <value>production</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
             <attribute-definition attribute-id="powerboardEnableSaveCard">
                 <display-name xml:lang="x-default">Save card</display-name>
                 <description xml:lang="x-default">Offer your customer to save the card permanently at PowerBoard.</description>
@@ -364,7 +380,7 @@
                 <type>boolean</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <default-value>true</default-value>
+                <default-value>false</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="powerboardCheckoutButtonAfterpayGatewayID">
                 <display-name xml:lang="x-default">Afterpay Gateway ID</display-name>
@@ -459,6 +475,13 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="powerboardWalletButtonsApplePayMerchantIdDomainAssociation">
+                <display-name xml:lang="x-default">Apple Pay Developer Merchant ID Domain Association</display-name>
+                <description xml:lang="x-default">Developer Merchant ID Domain Association for Apple Pay</description>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
             <attribute-definition attribute-id="powerboardWalletButtonsApplePayFraud">
                 <display-name xml:lang="x-default">Apple Pay Fraud</display-name>
@@ -621,7 +644,7 @@
                 <attribute attribute-id="powerboardConnectionType"/>
                 <attribute attribute-id="powerboardRawErrorMessaging"/>
                 <attribute attribute-id="powerboardWidgetStyles"/>
-                <attribute attribute-id="powerboardBMChargeOperationsAll"/>
+                <attribute attribute-id="powerboardEnvironment"/>
             </attribute-group>
             <attribute-group group-id="PowerBoardWalletButtons">
                 <display-name xml:lang="x-default">PowerBoard Wallets</display-name>
@@ -629,6 +652,7 @@
                 <attribute attribute-id="powerboardWalletButtonsApplePayChargeCapture"/>
                 <attribute attribute-id="powerboardWalletButtonsApplePayFraud"/>
                 <attribute attribute-id="powerboardWalletButtonsApplePayFraudServiceID"/>
+                <attribute attribute-id="powerboardWalletButtonsApplePayMerchantIdDomainAssociation"/>
                 <attribute attribute-id="powerboardWalletButtonsGooglePayGatewayID"/>
                 <attribute attribute-id="powerboardWalletButtonsGooglePayChargeCapture"/>
                 <attribute attribute-id="powerboardWalletButtonsGooglePayFraud"/>
@@ -646,7 +670,6 @@
                 <attribute attribute-id="powerboardCheckoutButtonZipMoneyFraud"/>
                 <attribute attribute-id="powerboardCheckoutButtonZipMoneyFraudServiceID"/>
                 <attribute attribute-id="powerboardCheckoutButtonAfterpayGatewayID"/>
-                <attribute attribute-id="powerboardCheckoutButtonAfterpayChargeCapture"/>
                 <attribute attribute-id="powerboardCheckoutButtonAfterpayFraud"/>
                 <attribute attribute-id="powerboardCheckoutButtonAfterpayFraudServiceID"/>
             </attribute-group>

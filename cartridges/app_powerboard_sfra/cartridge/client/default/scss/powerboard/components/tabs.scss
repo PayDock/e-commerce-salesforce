@@ -27,6 +27,11 @@
     text-align: left;
 }
 
+.payment-options .nav-item .powerboard-tab {
+    display: flex;
+    justify-content: space-between;
+}
+
 .payment-options .nav-item .nav-link {
     border: 1px solid $black;
     margin: .625rem 0;
@@ -50,6 +55,30 @@
 
 .payment-options .tab-pane.active {
     border-top: none;
+}
+
+.credit-card-option,
+.powerboard-checkout-button-zipmoney-option,
+.powerboard-wallet-buttons-apple-pay-option,
+.powerboard-wallet-buttons-google-pay-option,
+.powerboard-wallet-buttons-paypal-option,
+.powerboard-option-logo {
+    padding-right: 20px;
+    vertical-align: sub;
+}
+
+.powerboard-wallet-buttons-paypal-option,
+.powerboard-wallet-buttons-afterpay-option {
+    vertical-align: baseline;
+}
+
+.powerboard-checkout-button-afterpay-option {
+    padding-right: 11px;
+    vertical-align: middle;
+}
+
+.powerboard-wallet-buttons-afterpay-option {
+    padding-right: 15px;
 }
 
 @include media-breakpoint-up(lg) {

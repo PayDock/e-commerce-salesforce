@@ -23,15 +23,14 @@ server.replace('Start', function (req, res, next) {
     var location = redirect ? redirect.location : null;
     var redirectStatus = redirect ? redirect.getStatus() : null;
 
-    // if (URLRedirectMgr.getRedirectOrigin() === '/.well-known/apple-developer-merchantid-domain-association.txt') {
     if (
         (URLRedirectMgr.getRedirectOrigin() === '/.well-known/apple-developer-merchantid-domain-association.txt') ||
         (
-            !empty(CurrentRequest.httpHeaders["x-is-path_info"]) &&
+            !empty(request.httpHeaders["x-is-path_info"]) &&
             (
-                CurrentRequest.httpHeaders['x-is-path_info'] == 'apple-developer-merchantid-domain-association.txt' ||
-                CurrentRequest.httpHeaders['x-is-path_info'] == '.well-known/apple-developer-merchantid-domain-association.txt' ||
-                CurrentRequest.httpHeaders['x-is-path_info'] == '/.well-known/apple-developer-merchantid-domain-association.txt'
+                request.httpHeaders['x-is-path_info'] == 'apple-developer-merchantid-domain-association.txt' ||
+                request.httpHeaders['x-is-path_info'] == '.well-known/apple-developer-merchantid-domain-association.txt' ||
+                request.httpHeaders['x-is-path_info'] == '/.well-known/apple-developer-merchantid-domain-association.txt'
             )
         )
     ) {

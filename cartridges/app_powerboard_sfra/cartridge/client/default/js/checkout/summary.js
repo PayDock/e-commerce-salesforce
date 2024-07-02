@@ -20,6 +20,11 @@ function powerboardWalletButtonsWidgetInit() {
         var powerboardWalletButtonsCountry = powerboardWalletButtonsWidget.dataset.walletButtonsCountry;
         var powerboardWalletButtonsPayLater = powerboardWalletButtonsWidget.dataset.walletButtonsPayLater;
 
+        var powerboardWalletButtonsEnv = powerboardWalletButtonsWidget.dataset.env;
+        powerboardWalletButtonsEnv = ['sandbox', 'production'].indexOf(powerboardWalletButtonsEnv) !== -1 ?
+            powerboardWalletButtonsEnv :
+            'sandbox';
+
         if (powerboardWalletButtonsToken) {
             var button = new cba.WalletButtons(
                 '#' + powerboardWalletButtonsWidget.id,
@@ -30,6 +35,8 @@ function powerboardWalletButtonsWidgetInit() {
                     pay_later: powerboardWalletButtonsPayLater
                 }
             );
+
+            button.setEnv(powerboardWalletButtonsEnv === 'sandbox' ? 'preproduction_cba' : 'production_cba');
 
             button.onPaymentSuccessful(function (data) {
                 $('.btn.place-order').trigger('click');
@@ -62,6 +69,11 @@ function powerboardCheckoutButtonAfterpayWidgetInit() {
     var powerboardTokenNameSelector = 'input[name="payment_source_token_afterpay"]';
     var powerboardTokenNameElement = powerboardTokenNameSelector ? document.querySelector(powerboardTokenNameSelector) : null;
 
+    var powerboardCheckoutButtonEnv = powerboardCheckoutButton.dataset.env;
+    powerboardCheckoutButtonEnv = ['sandbox', 'production'].indexOf(powerboardCheckoutButtonEnv) !== -1 ?
+        powerboardCheckoutButtonEnv :
+        'sandbox';
+
     try {
         powerboardMeta = JSON.parse(powerboardMeta);
     }
@@ -75,6 +87,8 @@ function powerboardCheckoutButtonAfterpayWidgetInit() {
             powerboardPublicKey,
             powerboardGatewayId
         );
+
+        button.setEnv(powerboardCheckoutButtonEnv === 'sandbox' ? 'preproduction_cba' : 'production_cba');
 
         button.onFinishInsert(powerboardTokenNameSelector, 'payment_source_token_afterpay');
 
@@ -113,6 +127,11 @@ function powerboardCheckoutButtonZipMoneyWidgetInit() {
     var powerboardTokenNameSelector = 'input[name="payment_source_token_zipmoney"]';
     var powerboardTokenNameElement = powerboardTokenNameSelector ? document.querySelector(powerboardTokenNameSelector) : null;
 
+    var powerboardCheckoutButtonEnv = powerboardCheckoutButton.dataset.env;
+    powerboardCheckoutButtonEnv = ['sandbox', 'production'].indexOf(powerboardCheckoutButtonEnv) !== -1 ?
+        powerboardCheckoutButtonEnv :
+        'sandbox';
+
     try {
         powerboardMeta = JSON.parse(powerboardMeta);
     }
@@ -126,6 +145,8 @@ function powerboardCheckoutButtonZipMoneyWidgetInit() {
             powerboardPublicKey,
             powerboardGatewayId
         );
+
+        button.setEnv(powerboardCheckoutButtonEnv === 'sandbox' ? 'preproduction_cba' : 'production_cba');
 
         button.onFinishInsert(powerboardTokenNameSelector, 'payment_source_token_zipmoney');
 

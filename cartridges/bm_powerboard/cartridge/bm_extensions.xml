@@ -6,14 +6,14 @@
 	<!-- ==                                                           == -->
 	<!-- =============================================================== -->
 	
-	<menuitem id="powerboardSite" position="9000" site="true">
+	<menuitem id="powerboardSite" position="9100" site="true">
 		<name xml:lang="x-default">PowerBoard</name>
 		<short_description xml:lang="x-default">PowerBoard</short_description>
 		<description xml:lang="x-default">PowerBoard</description>
 		<icon>icons/channel_ico.gif</icon>
 	</menuitem>
 	
-	<menuaction id="powerboardPayments" menupath="powerboardSite" position="9002" site="true">
+	<menuaction id="powerboardPayments" menupath="powerboardSite" position="9102" site="true">
 		<name xml:lang="x-default">PowerBoard Payments</name>
 		<short_description xml:lang="x-default">
 			PowerBoard Payments
@@ -25,6 +25,26 @@
 		<sub-pipelines>
 			<pipeline name="PowerBoardBM-Charges" />
 			<pipeline name="PowerBoardBM-HandleCharge" />
+		</sub-pipelines>
+		<parameters>
+		</parameters>
+		<permissions>
+		</permissions>
+		<icon>icons/sitespaymentmethods_ico.gif</icon>
+	</menuaction>
+
+	<menuaction id="powerboardNotifications" menupath="powerboardSite" position="9103" site="true">
+		<name xml:lang="x-default">PowerBoard Notifications</name>
+		<short_description xml:lang="x-default">
+			PowerBoard Notifications
+		</short_description>
+		<description xml:lang="x-default">
+			PowerBoard Notifications Operations
+		</description>
+		<exec pipeline="PowerBoardBM" node="Notifications" />
+		<sub-pipelines>
+			<pipeline name="PowerBoardBM-Notifications" />
+			<pipeline name="PowerBoardBM-HandleNotifications" />
 		</sub-pipelines>
 		<parameters>
 		</parameters>

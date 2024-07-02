@@ -13,5 +13,6 @@
         data-wallet-buttons-amount-label="${payment.amountLabel}"
         data-wallet-buttons-country="${payment.country}"
         data-wallet-buttons-pay-later="${payment.payLater}"
+        data-env="${pdict.powerboardEnvironment}"
     ></div>
 </isif>
