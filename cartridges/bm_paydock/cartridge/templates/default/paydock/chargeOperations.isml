@@ -14,6 +14,9 @@
   var eligibleForCancel;
   var underProcessing;
 
+  var maxCaptureAmount = 0;
+  var maxRefundAmount = 0;
+
   if (preferences.paydock.paydockBMChargeOperationsAll) { // all operations are always enabled
     eligibleForCapture = true;
     eligibleForRefund = true;
@@ -25,8 +28,16 @@
     eligibleForRefund = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForRefund(paydockPI);
     eligibleForCancel = paydockCheckoutHelper.isPaydockPaymentInstrumentEligibleForCancel(paydockPI);
     underProcessing = paydockCheckoutHelper.isPaydockPaymentInstrumentUnderProcessing(paydockPI);
+
+    maxCaptureAmount = paydockCheckoutHelper.getPaydockPaymentInstrumentCaptureAmount(paydockPI);
+    maxCaptureAmount = (maxCaptureAmount !== null) ? maxCaptureAmount : 0;
+
+    maxRefundAmount = paydockCheckoutHelper.getPaydockPaymentInstrumentRefundAmount(paydockPI);
+    maxRefundAmount = (maxRefundAmount !== null) ? maxRefundAmount : 0;
   }
 </isscript>
+
+<link href="${URLUtils.staticURL('css/paydockbm.css')}" type="text/css" rel="stylesheet" />
 
 <h4 class="dw-nc-text-heading dw-nc-text-brand" style="margin-top: 20px;">
   ${Resource.msg('paydock.charge.operations.title','paydockbm', null)}
@@ -59,13 +70,14 @@
         <isif condition="${eligibleForCapture}">
           <tr>
             <th style="width: 20%;" align="left">${Resource.msg('paydock.charge.capture.title','paydockbm', null)}</th>
-            <td colspan="2" style="width: 80%" align="right"><button type="submit" name="operation" value="capture" class="button">${Resource.msg('paydock.charge.issue.submit','paydockbm', null)}</button></td>
+            <td style="width: 60%"><input id="paydockCaptureAmount" name="captureAmount" type="number" step="0.01" value="${maxCaptureAmount}" /></td>
+            <td style="width: 20%" align="right"><button type="submit" name="operation" value="capture" class="button">${Resource.msg('paydock.charge.issue.submit','paydockbm', null)}</button></td>
           </tr>
         </isif>
         <isif condition="${eligibleForRefund}">
           <tr>
             <th style="width: 20%;" align="left">${Resource.msg('paydock.charge.refund.title','paydockbm', null)}</th>
-            <td style="width: 60%"><input id="paydockRefundAmount" name="refundAmount" type="number" step="0.01" placeholder="10.99" /></td>
+            <td style="width: 60%"><input id="paydockRefundAmount" name="refundAmount" type="number" step="0.01" value="${maxRefundAmount}" /></td>
             <td style="width: 20%" align="right"><button type="submit" name="operation" value="refund" class="button">${Resource.msg('paydock.charge.issue.submit','paydockbm', null)}</button></td>
           </tr>
         </isif>

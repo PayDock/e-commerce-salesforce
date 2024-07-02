@@ -366,6 +366,30 @@ function isPaydockPaymentInstrumentEligibleForCapture(paymentInstrument) {
 }
 
 /**
+ * Returns the maximum amount the capture may be requested for the Paydock Payment Instrument.
+ *
+ * @param {dw.order.PaymentInstrument} paymentInstrument - Paydock Payment Instrument
+ * @return {Number|null} - The amount
+ */
+function getPaydockPaymentInstrumentCaptureAmount(paymentInstrument) {
+    // early returns
+    if (
+        !isPaydockPaymentInstrumentEligibleForCapture(paymentInstrument) ||
+        !paymentInstrument.paymentTransaction.amount.available
+    ) return null;
+
+    // data normalization
+    var capturedAmount = paymentInstrument.custom.paydockCapturedAmount;
+    capturedAmount = !empty(capturedAmount) ? Number(capturedAmount) : 0;
+    capturedAmount = !isNaN(capturedAmount) ? capturedAmount : 0;
+
+    var maxCaptureAmount = paymentInstrument.paymentTransaction.amount.value - capturedAmount;
+    maxCaptureAmount = new dw.value.Money(maxCaptureAmount, paymentInstrument.paymentTransaction.amount.currencyCode);
+
+    return maxCaptureAmount.value;
+}
+
+/**
  * Checks if Paydock Payment Instrument is eligible to request charge refund.
  *
  * @param {dw.order.PaymentInstrument} paymentInstrument - Paydock Payment Instrument
@@ -398,6 +422,34 @@ function isPaydockPaymentInstrumentEligibleForRefund(paymentInstrument) {
     }
 
     return false;
+}
+
+/**
+ * Returns the maximum amount the refund may be requested for the Paydock Payment Instrument.
+ *
+ * @param {dw.order.PaymentInstrument} paymentInstrument - Paydock Payment Instrument
+ * @return {Number|null} - The amount
+ */
+function getPaydockPaymentInstrumentRefundAmount(paymentInstrument) {
+    // early returns
+    if (
+        !isPaydockPaymentInstrumentEligibleForRefund(paymentInstrument) ||
+        !paymentInstrument.paymentTransaction.amount.available
+    ) return null;
+
+    // data normalization
+    var capturedAmount = paymentInstrument.custom.paydockCapturedAmount;
+    capturedAmount = !empty(capturedAmount) ? Number(capturedAmount) : 0;
+    capturedAmount = !isNaN(capturedAmount) ? capturedAmount : 0;
+
+    var refundedAmount = paymentInstrument.custom.paydockRefundedAmount;
+    refundedAmount = !empty(refundedAmount) ? Number(refundedAmount) : 0;
+    refundedAmount = !isNaN(refundedAmount) ? refundedAmount : 0;
+
+    var maxRefundAmount = capturedAmount >= refundedAmount ? capturedAmount - refundedAmount : 0;
+    maxRefundAmount = new dw.value.Money(maxRefundAmount, paymentInstrument.paymentTransaction.amount.currencyCode);
+
+    return maxRefundAmount.value;
 }
 
 /**
@@ -676,8 +728,7 @@ function processStandAloneApproveNotification(order, paymentInstrument, notifica
 
   var chargeReqObj = {
     amount: paymentAmount.value.toString(),
-    currency: 'AUD',
-    // currency: paymentCurrency,
+    currency: paymentAmount.currencyCode,
     reference: order.orderNo,
     customer: {
       payment_source: {
@@ -876,8 +927,7 @@ function getCheckoutButtonAfterpayMeta(lineItemCtnr) {
     if (billingAddress) {
         meta = {
             amount: amount.value,
-            // currency: lineItemCtnr.getCurrencyCode(),
-            currency: 'AUD',
+            currency: lineItemCtnr.getCurrencyCode(),
             email: lineItemCtnr.customerEmail,
             first_name: billingAddress.firstName,
             last_name: billingAddress.lastName,
@@ -928,8 +978,7 @@ function getCheckoutButtonZipMoneyMeta(lineItemCtnr) {
         tokenize: true,
         charge: {
             amount: amount.value.toString(),
-            // currency: lineItemCtnr.getCurrencyCode(),
-            currency: 'AUD',
+            currency: lineItemCtnr.getCurrencyCode(),
             items: []
         }
     };
@@ -1044,7 +1093,7 @@ function createOrder(currentBasket) {
  * 
  * @param {String} chargeId - Charge ID
  * @param {Number} amount - amount to be refunded
- * * @param {dw.order.Order} order - Order optional
+ * @param {dw.order.Order} order - Order optional
  * @returns {Object|null} Operation result in case of success, null otherwise
  */
 function refundPaydockCharge(chargeId, amount, order) {
@@ -1653,7 +1702,9 @@ module.exports = {
     removePaydockPaymentInstruments: removePaydockPaymentInstruments,
     createPaydockPaymentInstrument: createPaydockPaymentInstrument,
     isPaydockPaymentInstrumentEligibleForCapture: isPaydockPaymentInstrumentEligibleForCapture,
+    getPaydockPaymentInstrumentCaptureAmount: getPaydockPaymentInstrumentCaptureAmount,
     isPaydockPaymentInstrumentEligibleForRefund: isPaydockPaymentInstrumentEligibleForRefund,
+    getPaydockPaymentInstrumentRefundAmount: getPaydockPaymentInstrumentRefundAmount,
     isPaydockPaymentInstrumentEligibleForCancel: isPaydockPaymentInstrumentEligibleForCancel,
     isPaydockPaymentInstrumentUnderProcessing: isPaydockPaymentInstrumentUnderProcessing,
     updatePaydockPaymentInstrumentWithChargeDetails: updatePaydockPaymentInstrumentWithChargeDetails,

@@ -6,9 +6,23 @@
 
 <li class="nav-item" data-method-id="${paymentOption.ID}">
     <a class="nav-link paydock-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#paydock-content" role="tab">
-        <label>
-            ${paymentOption.name}
-        </label>
+        <div>
+            <img class="paydock-option-logo"
+                src="${URLUtils.staticURL('/images/creditCard.png')}"
+                height="31"
+                alt="${paymentOption.name}"
+                title="${paymentOption.name}"
+            />
+            <label>
+                ${paymentOption.name}
+            </label>
+        </div>
+        <img class="paydock-option"
+            src="${URLUtils.staticURL('/images/paydock.svg')}"
+            width="110px"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
     </a>
 </li>
 

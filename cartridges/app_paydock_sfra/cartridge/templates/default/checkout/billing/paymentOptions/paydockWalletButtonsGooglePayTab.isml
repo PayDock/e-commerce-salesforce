@@ -6,6 +6,12 @@
 
 <li class="nav-item" data-method-id="${paymentOption.ID}">
     <a class="nav-link paydock-wallet-buttons-google-pay-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#paydock-wallet-buttons-google-pay-content" role="tab">
+        <img class="paydock-wallet-buttons-google-pay-option"
+            src="${paymentOption.image || URLUtils.staticURL('/images/GooglePay.png')}"
+            height="23"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
         <label>
             ${paymentOption.name}
         </label>

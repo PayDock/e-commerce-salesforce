@@ -19,19 +19,18 @@ server.append(
           null;
         var gatewayID = 'not_configured';
 
-        if (preferences.paydock.paydock3DSFlow.value === 'ott'
-        ) {
-          gatewayID = preferences.paydock.paydockGatewayID
+        if (preferences.paydock.paydock3DSFlow.value === 'ott') {
+          gatewayID = preferences.paydock.paydockGatewayID;
         }
 
         var schemas = preferences.paydock.paydockCardScheme;
-        var tempArr = []
+        var tempArr = [];
 
         schemas.forEach(function (el) {
-          tempArr.push(el.toLowerCase())
-        })
+          tempArr.push(el.toLowerCase());
+        });
 
-        var saveCard = preferences.paydock.paydockEnableSaveCard && preferences.paydock.paydock3DSFlow.value === 'vault'
+        var saveCard = preferences.paydock.paydockEnableSaveCard && preferences.paydock.paydock3DSFlow.value === 'vault';
 
         res.setViewData({
           paydockPublicAPIKey: preferences.paydock.paydockPublicAPIKey,
@@ -41,7 +40,8 @@ server.append(
           selectedPaydockPaymentInstrument: selectedPaydockPaymentInstrument,
           paydock3DSType: preferences.paydock.paydock3DSType.value,
           paydock3DSFlow: preferences.paydock.paydock3DSFlow.value,
-          paydockCardScheme: tempArr.join(',')
+          paydockCardScheme: tempArr.join(','),
+          paydockEnvironment: preferences.paydock.paydockEnvironment
         });
 
         return next();

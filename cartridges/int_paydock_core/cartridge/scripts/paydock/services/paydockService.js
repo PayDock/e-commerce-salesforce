@@ -42,7 +42,8 @@ function collectParams(collector, payload, prefix) {
  * @returns {dw.svc.Service} - The created service definition.
  */
 function getPaydockServiceDefinition() {
-	return LocalServiceRegistry.createService('paydock.http.service', {
+	return LocalServiceRegistry.createService(
+		preferences.paydock.paydockEnvironment === 'production' ? 'paydock.production.http.service' : 'paydock.sandbox.http.service', {
 		createRequest: function (svc, requestObject) {
 			const apiSecretKey = preferences.paydock.paydockPrivateAPIKey;
 
@@ -172,11 +173,13 @@ module.exports.charges = {
 		var requestObject = {
 			endpoint: '/v1/charges',
 			httpMethod: 'POST',
-			payload: chargePayload,
-      		queryString: {
-        		capture: (!!chargeCapture).toString()
-			}
+			payload: chargePayload
 		};
+
+		if (typeof chargeCapture !== 'undefined') {
+			requestObject.queryString = requestObject.queryString || {};
+			requestObject.queryString.capture = (!!chargeCapture).toString();
+		}
 
 		return callService(requestObject);
 	},
@@ -270,6 +273,34 @@ module.exports.customers = {
 			endpoint: '/v1/customers',
 			httpMethod: 'POST',
 			payload: customersPayload
+		};
+
+		return callService(requestObject);
+	}
+};
+
+module.exports.notifications = {
+	create: function(notificationsPayload) {
+		var requestObject = {
+			endpoint: '/v1/notifications',
+			httpMethod: 'POST',
+			payload: notificationsPayload
+		};
+
+		return callService(requestObject);
+	},
+	delete: function(notificationId) {
+		var requestObject = {
+			endpoint: '/v1/notifications/' + notificationId,
+			httpMethod: 'DELETE'
+		};
+
+		return callService(requestObject);
+	},
+	search: function(type, skip, limit, sortKey, sortDirection) {
+		var requestObject = {
+			endpoint: '/v1/notifications?type=' + type + '&skip=' + skip + '&limit=' + limit + '&sortkey=' + sortKey + '&sortdirection=' + sortDirection,
+			httpMethod: 'GET'
 		};
 
 		return callService(requestObject);

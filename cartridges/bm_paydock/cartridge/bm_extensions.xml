@@ -33,4 +33,23 @@
 		<icon>icons/sitespaymentmethods_ico.gif</icon>
 	</menuaction>
 
+	<menuaction id="paydockNotifications" menupath="paydockSite" position="9003" site="true">
+		<name xml:lang="x-default">Paydock Notifications</name>
+		<short_description xml:lang="x-default">
+			Paydock Notifications
+		</short_description>
+		<description xml:lang="x-default">
+			Paydock Notifications Operations
+		</description>
+		<exec pipeline="PaydockBM" node="Notifications" />
+		<sub-pipelines>
+			<pipeline name="PaydockBM-HandleNotifications" />
+		</sub-pipelines>
+		<parameters>
+		</parameters>
+		<permissions>
+		</permissions>
+		<icon>icons/sitespaymentmethods_ico.gif</icon>
+	</menuaction>
+
 </extensions>

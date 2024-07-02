@@ -50,6 +50,7 @@ function getSelectedPaymentInstruments(selectedPaymentInstruments, countryCode) 
         results.maskedCreditCardNumber = paymentInstrument.maskedCreditCardNumber;
         results.expirationMonth = paymentInstrument.creditCardExpirationMonth;
         results.canvasToken = paymentInstrument.custom.paydock3DSToken || '';
+        results.env = preferences.paydock.paydockEnvironment;
     }
     else if (['PAYDOCK_WALLET_BUTTONS_APPLE_PAY', 'PAYDOCK_WALLET_BUTTONS_GOOGLE_PAY', 'PAYDOCK_WALLET_BUTTONS_PAYPAL', 'PAYDOCK_WALLET_BUTTONS_AFTERPAY'].indexOf(paymentInstrument.paymentMethod) !== -1) {
       results.gatewayType = paymentInstrument.custom.paydockGatewayType;
@@ -65,6 +66,8 @@ function getSelectedPaymentInstruments(selectedPaymentInstruments, countryCode) 
       if (paymentInstrument.paymentTransaction) {
         results.accountType = paymentInstrument.paymentTransaction.accountType;
       }
+
+      results.env = preferences.paydock.paydockEnvironment;
     }
     else if (paymentInstrument.paymentMethod === 'PAYDOCK_CHECKOUT_BUTTON_AFTERPAY') {
       var currentBasket = BasketMgr.getCurrentOrNewBasket();
@@ -96,6 +99,8 @@ function getSelectedPaymentInstruments(selectedPaymentInstruments, countryCode) 
       if (paymentInstrument.paymentTransaction) {
         results.accountType = paymentInstrument.paymentTransaction.accountType;
       }
+
+      results.env = preferences.paydock.paydockEnvironment;
     }
     else if (paymentInstrument.paymentMethod === 'PAYDOCK_CHECKOUT_BUTTON_ZIPMONEY') {
       var currentBasket = BasketMgr.getCurrentOrNewBasket();
@@ -121,6 +126,8 @@ function getSelectedPaymentInstruments(selectedPaymentInstruments, countryCode) 
       if (paymentInstrument.paymentTransaction) {
         results.accountType = paymentInstrument.paymentTransaction.accountType;
       }
+
+      results.env = preferences.paydock.paydockEnvironment;
     }
 
     return results;

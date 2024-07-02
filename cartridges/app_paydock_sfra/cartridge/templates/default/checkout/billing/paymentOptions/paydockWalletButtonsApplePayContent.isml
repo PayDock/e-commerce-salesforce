@@ -5,15 +5,6 @@
 </isscript>
 
 <div class="tab-pane ${isActive ? 'active' : ''} paydock-wallet-buttons-apple-pay-content" id="paydock-wallet-buttons-apple-pay-content" content-id="${paymentOption.ID}" role="tabpanel">
-    <div style="text-align: center; margin-bottom: 12px;">
-        <img class="paydock-option"
-            src="${URLUtils.staticURL('/images/paydock.svg')}"
-            width="110px"
-            alt="${paymentOption.name}"
-            title="${paymentOption.name}"
-        />
-    </div>
-
     <fieldset class="payment-form-fields">
         <!--- payment method is Paydock Wallet Buttons Apple Pay --->
         <input type="hidden" class="form-control"
