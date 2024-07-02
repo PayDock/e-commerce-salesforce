@@ -5,6 +5,7 @@ var OrderMgr = require('dw/order/OrderMgr');
 var Order = require('dw/order/Order');
 var PaymentTransaction = require('dw/order/PaymentTransaction');
 var Resource = require('dw/web/Resource');
+var PaymentMgr = require('dw/order/PaymentMgr');
 
 var preferences = require('*/cartridge/config/preferences');
 
@@ -104,7 +105,8 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
       paymentInstrument.creditCardHolder = customerSource.first_name + ' ' + customerSource.last_name;
       paymentInstrument.paymentTransaction.setAccountType(customerSource.payment_source.gateway_type);
 
-      order.custom.paydockPaymentMethod = paymentInstrument.getPaymentMethod();
+      var paymentMethod = PaymentMgr.getPaymentMethod(paymentInstrument.getPaymentMethod());
+      order.custom.paydockPaymentMethod = paymentMethod.getName();
 
       if (chargeResult.resource.data.status === 'complete') {
         order.setPaymentStatus(Order.PAYMENT_STATUS_PAID);

@@ -5,15 +5,6 @@
 </isscript>
 
 <div class="tab-pane ${isActive ? 'active' : ''} paydock-checkout-button-afterpay-content" id="paydock-checkout-button-afterpay-content" content-id="${paymentOption.ID}" role="tabpanel" data-dwfrm-name="${pdict.forms.billingForm.paydockToken.htmlName}">
-    <div style="text-align: center; margin-bottom: 12px;">
-        <img class="paydock-option"
-            src="${URLUtils.staticURL('/images/paydock.svg')}"
-            width="110px"
-            alt="${paymentOption.name}"
-            title="${paymentOption.name}"
-        />
-    </div>
-
     <fieldset class="payment-form-fields">
         <!--- payment method is Paydock Checkout Button Afterpay --->
         <input type="hidden" class="form-control"

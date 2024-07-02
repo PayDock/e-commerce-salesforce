@@ -270,6 +270,22 @@
                     </value-definition>
                 </value-definitions>
             </attribute-definition>
+            <attribute-definition attribute-id="paydockEnvironment">
+                <display-name xml:lang="x-default">Environment to connect</display-name>
+                <type>enum-of-string</type>
+                <mandatory-flag>true</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
+                <value-definitions>
+                    <value-definition default="true">
+                        <display xml:lang="x-default">Sandbox</display>
+                        <value>sandbox</value>
+                    </value-definition>
+                    <value-definition>
+                        <display xml:lang="x-default">Production</display>
+                        <value>production</value>
+                    </value-definition>
+                </value-definitions>
+            </attribute-definition>
             <attribute-definition attribute-id="paydockEnableSaveCard">
                 <display-name xml:lang="x-default">Save card</display-name>
                 <description xml:lang="x-default">Offer your customer to save the card permanently at Paydock.</description>
@@ -364,7 +380,7 @@
                 <type>boolean</type>
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
-                <default-value>true</default-value>
+                <default-value>false</default-value>
             </attribute-definition>
             <attribute-definition attribute-id="paydockCheckoutButtonAfterpayGatewayID">
                 <display-name xml:lang="x-default">Afterpay Gateway ID</display-name>
@@ -459,6 +475,13 @@
                 <mandatory-flag>false</mandatory-flag>
                 <externally-managed-flag>false</externally-managed-flag>
                 <min-length>0</min-length>
+            </attribute-definition>
+            <attribute-definition attribute-id="paydockWalletButtonsApplePayMerchantIdDomainAssociation">
+                <display-name xml:lang="x-default">Apple Pay Developer Merchant ID Domain Association</display-name>
+                <description xml:lang="x-default">Developer Merchant ID Domain Association for Apple Pay</description>
+                <type>text</type>
+                <mandatory-flag>false</mandatory-flag>
+                <externally-managed-flag>false</externally-managed-flag>
             </attribute-definition>
             <attribute-definition attribute-id="paydockWalletButtonsApplePayFraud">
                 <display-name xml:lang="x-default">Apple Pay Fraud</display-name>
@@ -621,7 +644,7 @@
                 <attribute attribute-id="paydockConnectionType"/>
                 <attribute attribute-id="paydockRawErrorMessaging"/>
                 <attribute attribute-id="paydockWidgetStyles"/>
-                <attribute attribute-id="paydockBMChargeOperationsAll"/>
+                <attribute attribute-id="paydockEnvironment"/>
             </attribute-group>
             <attribute-group group-id="PaydockWalletButtons">
                 <display-name xml:lang="x-default">Paydock Wallets</display-name>
@@ -629,6 +652,7 @@
                 <attribute attribute-id="paydockWalletButtonsApplePayChargeCapture"/>
                 <attribute attribute-id="paydockWalletButtonsApplePayFraud"/>
                 <attribute attribute-id="paydockWalletButtonsApplePayFraudServiceID"/>
+                <attribute attribute-id="paydockWalletButtonsApplePayMerchantIdDomainAssociation"/>
                 <attribute attribute-id="paydockWalletButtonsGooglePayGatewayID"/>
                 <attribute attribute-id="paydockWalletButtonsGooglePayChargeCapture"/>
                 <attribute attribute-id="paydockWalletButtonsGooglePayFraud"/>
@@ -646,7 +670,6 @@
                 <attribute attribute-id="paydockCheckoutButtonZipMoneyFraud"/>
                 <attribute attribute-id="paydockCheckoutButtonZipMoneyFraudServiceID"/>
                 <attribute attribute-id="paydockCheckoutButtonAfterpayGatewayID"/>
-                <attribute attribute-id="paydockCheckoutButtonAfterpayChargeCapture"/>
                 <attribute attribute-id="paydockCheckoutButtonAfterpayFraud"/>
                 <attribute attribute-id="paydockCheckoutButtonAfterpayFraudServiceID"/>
             </attribute-group>

@@ -20,6 +20,11 @@ function paydockWalletButtonsWidgetInit() {
         var paydockWalletButtonsCountry = paydockWalletButtonsWidget.dataset.walletButtonsCountry;
         var paydockWalletButtonsPayLater = paydockWalletButtonsWidget.dataset.walletButtonsPayLater;
 
+        var paydockWalletButtonsEnv = paydockWalletButtonsWidget.dataset.env;
+        paydockWalletButtonsEnv = ['sandbox', 'production'].indexOf(paydockWalletButtonsEnv) !== -1 ?
+            paydockWalletButtonsEnv :
+            'sandbox';
+
         if (paydockWalletButtonsToken) {
             var button = new paydock.WalletButtons(
                 '#' + paydockWalletButtonsWidget.id,
@@ -30,6 +35,8 @@ function paydockWalletButtonsWidgetInit() {
                     pay_later: paydockWalletButtonsPayLater
                 }
             );
+
+            button.setEnv(paydockWalletButtonsEnv);
 
             button.onPaymentSuccessful(function (data) {
                 $('.btn.place-order').trigger('click');
@@ -62,6 +69,11 @@ function paydockCheckoutButtonAfterpayWidgetInit() {
     var paydockTokenNameSelector = 'input[name="payment_source_token_afterpay"]';
     var paydockTokenNameElement = paydockTokenNameSelector ? document.querySelector(paydockTokenNameSelector) : null;
 
+    var paydockCheckoutButtonEnv = paydockCheckoutButton.dataset.env;
+    paydockCheckoutButtonEnv = ['sandbox', 'production'].indexOf(paydockCheckoutButtonEnv) !== -1 ?
+        paydockCheckoutButtonEnv :
+        'sandbox';
+
     try {
         paydockMeta = JSON.parse(paydockMeta);
     }
@@ -75,6 +87,8 @@ function paydockCheckoutButtonAfterpayWidgetInit() {
             paydockPublicKey,
             paydockGatewayId
         );
+
+        button.setEnv(paydockCheckoutButtonEnv);
 
         button.onFinishInsert(paydockTokenNameSelector, 'payment_source_token_afterpay');
 
@@ -113,6 +127,11 @@ function paydockCheckoutButtonZipMoneyWidgetInit() {
     var paydockTokenNameSelector = 'input[name="payment_source_token_zipmoney"]';
     var paydockTokenNameElement = paydockTokenNameSelector ? document.querySelector(paydockTokenNameSelector) : null;
 
+    var paydockCheckoutButtonEnv = paydockCheckoutButton.dataset.env;
+    paydockCheckoutButtonEnv = ['sandbox', 'production'].indexOf(paydockCheckoutButtonEnv) !== -1 ?
+        paydockCheckoutButtonEnv :
+        'sandbox';
+
     try {
         paydockMeta = JSON.parse(paydockMeta);
     }
@@ -126,6 +145,8 @@ function paydockCheckoutButtonZipMoneyWidgetInit() {
             paydockPublicKey,
             paydockGatewayId
         );
+
+        button.setEnv(paydockCheckoutButtonEnv);
 
         button.onFinishInsert(paydockTokenNameSelector, 'payment_source_token_zipmoney');
 

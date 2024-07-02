@@ -4,18 +4,10 @@
         false;
 </isscript>
 
-<style>iframe {border: 0; width: 100%; height: 200px;}</style>
+<style>iframe {border: 0; width: 100%; height: 250px;}</style>
 
 <div class="tab-pane ${isActive ? 'active' : ''} paydock-content" id="paydock-content" content-id="${paymentOption.ID}" role="tabpanel">
-    <div style="text-align: center; margin-bottom: 12px;">
-        <img class="paydock-option"
-            src="${URLUtils.staticURL('/images/paydock.svg')}"
-            width="110px"
-            alt="${paymentOption.name}"
-            title="${paymentOption.name}"
-        />
-    </div>
-    
+        
     <fieldset class="payment-form-fields credit-card-form ${pdict.customer.registeredUser && pdict.customer.customerPaymentInstruments.length ? 'checkout-hidden' : ''}">
 
         <!--- payment method is Paydock --->
@@ -29,6 +21,7 @@
             data-public-key="${pdict.paydockPublicAPIKey}"
             data-dwfrm-name="${pdict.forms.billingForm.paydockToken.htmlName}"
             data-cart-scheme="${pdict.paydockCardScheme}"
+            data-env="${pdict.paydockEnvironment}"
             <isif condition="${typeof pdict.paydockReferenceId !== 'undefined' && pdict.paydockReferenceId}">
                 data-reference-id="${paydockReferenceId}"
             </isif>

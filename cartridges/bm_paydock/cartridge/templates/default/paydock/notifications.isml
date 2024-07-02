@@ -1,0 +1,35 @@
+<iscontent type="text/html" charset="UTF-8" compact="true">
+
+<isinclude url="${URLUtils.url('SiteNavigationBar-IncludeFrameTop','SelectedMenuItem',pdict.SelectedMenuItem,'CurrentMenuItemId',pdict.CurrentMenuItemId)}">
+
+<h4 class="dw-nc-text-heading dw-nc-text-heading dw-nc-text-brand" style="margin-top: 20px;">
+  ${Resource.msg('paydock.notifications.operations.title','paydockbm', null)}
+</h4>
+
+<form class="paydock-notifications-operations" id="paydock-notifications-operations"
+  action="${URLUtils.url('PaydockBM-HandleNotifications')}" method="POST">
+
+  <table width="100%" cellspacing="10px" cellpadding="0" border="0">
+    <caption style="text-align: left;">${Resource.msg('paydock.notifications.operations.info','paydockbm', null)}</caption>
+    <tbody>
+      <tr>
+        <th style="width: 40%;" align="left">${Resource.msg('paydock.notifications.create.all.title','paydockbm', null)}</th>
+        <td colspan="2" style="width: 60%" align="right"><button type="submit" name="operation" value="create" class="button">${Resource.msg('paydock.notifications.operation.submit','paydockbm', null)}</button></td>
+      </tr>
+      <tr>
+        <th style="width: 40%;" align="left">${Resource.msg('paydock.notifications.delete.all.title','paydockbm', null)}</th>
+        <td colspan="2" style="width: 60%" align="right"><button type="submit" name="operation" value="delete" class="button">${Resource.msg('paydock.notifications.operation.submit','paydockbm', null)}</button></td>
+      </tr>
+      <tr>
+        <th style="width: 40%;" align="left">${Resource.msg('paydock.notifications.search.title','paydockbm', null)}</th>
+        <td colspan="2" style="width: 60%" align="right"><button type="submit" name="operation" value="search" class="button">${Resource.msg('paydock.notifications.operation.submit','paydockbm', null)}</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="paydock-operations-submit-result"></p>
+</form>
+
+<script type="text/javascript" src="${URLUtils.staticURL('js/paydockbm.js')}"></script>
+
+<isinclude url="${URLUtils.url('SiteNavigationBar-IncludeFrameBottom')}">

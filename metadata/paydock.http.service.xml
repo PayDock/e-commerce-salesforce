@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns="http://www.demandware.com/xml/impex/services/2014-09-26">
-    <service-credential service-credential-id="paydock.http.service">
+    <service-credential service-credential-id="paydock.production.http.service">
+        <url>https://api.paydock.com</url>
+        <user-id/>
+        <password encrypted="true" encryption-type="common.export">9MDUUOEbzpncM7O/Nmpqarn3SeFELk0cjrEPEdKyfr4=</password>
+    </service-credential>
+
+    <service-credential service-credential-id="paydock.sandbox.http.service">
         <url>https://api-sandbox.paydock.com</url>
         <user-id/>
         <password encrypted="true" encryption-type="common.export">9MDUUOEbzpncM7O/Nmpqarn3SeFELk0cjrEPEdKyfr4=</password>
@@ -16,7 +22,7 @@
         <cb-millis>1000</cb-millis>
     </service-profile>
 
-    <service service-id="paydock.http.service">
+    <service service-id="paydock.production.http.service">
         <service-type>HTTP</service-type>
         <enabled>true</enabled>
         <log-prefix>PAYDOCK</log-prefix>
@@ -24,6 +30,17 @@
         <force-prd-enabled>true</force-prd-enabled>
         <mock-mode-enabled>false</mock-mode-enabled>
         <profile-id>paydock.http.service</profile-id>
-        <credential-id>paydock.http.service</credential-id>
+        <credential-id>paydock.production.http.service</credential-id>
+    </service>
+
+    <service service-id="paydock.sandbox.http.service">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>PAYDOCK</log-prefix>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>paydock.http.service</profile-id>
+        <credential-id>paydock.sandbox.http.service</credential-id>
     </service>
 </services>

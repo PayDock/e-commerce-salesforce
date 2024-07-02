@@ -5,6 +5,7 @@ var OrderMgr = require('dw/order/OrderMgr');
 var Order = require('dw/order/Order');
 var PaymentTransaction = require('dw/order/PaymentTransaction');
 var Resource = require('dw/web/Resource');
+var PaymentMgr = require('dw/order/PaymentMgr');
 
 var preferences = require('*/cartridge/config/preferences');
 
@@ -66,8 +67,7 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
 
   var chargeReqObj = {
     amount: paymentAmount,
-    currency: 'AUD',
-    // currency: paymentCurrency,
+    currency: paymentCurrency,
     reference: orderNumber,
     token: pst
   }
@@ -90,7 +90,14 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
   var chargeCapture = paymentInstrument.paymentTransaction.type.value === dw.order.PaymentTransaction.TYPE_CAPTURE;
 
   try {
-    chargeResult = paydockService.charges.create(chargeReqObj, chargeCapture);
+    if (paymentInstrument.paymentMethod === 'PAYDOCK_CHECKOUT_BUTTON_AFTERPAY') {
+      paydockCheckoutHelper.addChargePayloadDetails(chargeReqObj, order);
+
+      chargeResult = paydockService.charges.create(chargeReqObj);
+    }
+    else {
+      chargeResult = paydockService.charges.create(chargeReqObj, chargeCapture);
+    }
   } catch (e) {
     var t = e.message; 
     error = true;
@@ -116,8 +123,9 @@ function Authorize(orderNumber, paymentInstrument, paymentProcessor) {
       paymentInstrument.creditCardHolder = customerSource.first_name + ' ' + customerSource.last_name;
       paymentInstrument.paymentTransaction.setAccountType(customerSource.payment_source.gateway_type);
 
-      order.custom.paydockPaymentMethod = paymentInstrument.getPaymentMethod();
-  
+      var paymentMethod = PaymentMgr.getPaymentMethod(paymentInstrument.getPaymentMethod());
+      order.custom.paydockPaymentMethod = paymentMethod.getName();
+
       if (chargeResult.resource.data.status === 'complete') {
         order.setPaymentStatus(Order.PAYMENT_STATUS_PAID);
       }

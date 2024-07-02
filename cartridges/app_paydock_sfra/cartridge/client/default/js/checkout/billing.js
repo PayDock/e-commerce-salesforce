@@ -12,13 +12,27 @@ function paydockWidgetInit() {
     var paydockTokenName = document.getElementById("paydockWidget").dataset.dwfrmName;
     var paydockReferenceId = document.getElementById("paydockWidget").dataset.referenceId;
     var paydockWidgetStyles = document.getElementById("paydockWidget").dataset.styles;
+    var paydockWidgetEnv = document.getElementById("paydockWidget").dataset.env;
+    paydockWidgetEnv = ['sandbox', 'production'].indexOf(paydockWidgetEnv) !== -1 ?
+        paydockWidgetEnv :
+        'sandbox';
     var cartShemasString = document.getElementById("paydockWidget").dataset.cartScheme;
     var paydockTokenNameSelector = paydockTokenName ? 'input[name="' + paydockTokenName + '"]' : null;
     var paydockTokenNameElement = paydockTokenNameSelector ? document.querySelector(paydockTokenNameSelector) : null;
+    var browserDetailsResp;
 
     if (paydockPublicKey && paydockGatewayId && paydockTokenNameElement) {
         paydockWidget = new paydock.HtmlWidget('#paydockWidget', paydockPublicKey, paydockGatewayId);
-        var browserDetailsResp = new paydock.Api(paydockPublicKey).setEnv('production').getBrowserDetails();
+
+        if (paydockWidgetEnv === 'production') {
+            paydockWidget.setEnv('production', 'paydock.com');
+            browserDetailsResp = new paydock.Api(paydockPublicKey).setEnv('production').getBrowserDetails();
+        }
+        else {
+            paydockWidget.setEnv('sandbox');
+            browserDetailsResp = new paydock.Api(paydockPublicKey).setEnv('sandbox').getBrowserDetails();
+        }
+
         document.getElementById("paydock_browser_details").value = JSON.stringify(browserDetailsResp);
         paydockWidget.onFinishInsert(paydockTokenNameSelector, 'payment_source');
 
@@ -120,6 +134,7 @@ function updatePaydockPaymentInformation(order) {
                     + 'data-wallet-buttons-amount-label="' + paydockWalletButtonsPaymentInstrument.amountLabel + '" '
                     + 'data-wallet-buttons-country="' + paydockWalletButtonsPaymentInstrument.country + '" '
                     + 'data-wallet-buttons-pay-later="' + paydockWalletButtonsPaymentInstrument.payLater + '" '
+                    + 'data-env="' + paydockWalletButtonsPaymentInstrument.env + '" '
                     + '></div>';
 
                 $('.btn.place-order').addClass('d-none');
@@ -132,6 +147,7 @@ function updatePaydockPaymentInformation(order) {
                     + 'data-gateway-id="' + paydockCheckoutButtonAfterpayPaymentInstrument.gatewayId + '" '
                     + 'data-public-key="' + paydockCheckoutButtonAfterpayPaymentInstrument.publicKey + '" '
                     + (paydockCheckoutButtonAfterpayPaymentInstrument.meta ? 'data-meta=\'' + JSON.stringify(paydockCheckoutButtonAfterpayPaymentInstrument.meta) + '\' ' : '')
+                    + 'data-env="' + paydockCheckoutButtonAfterpayPaymentInstrument.env + '" '
                     + '><svg fill="#000000" width="110px" height="80px" viewBox="0 0 14 14" role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="m 1.6688886,10.40235 c -0.42637,-0.1202 -0.74189001,-0.6205 -0.65418,-1.0373 0.041,-0.1951 0.38294,-0.8122 1.68245,-3.0361 1.04718,-1.792 0.95525,-1.655 1.20332,-1.7945 0.386401,-0.2171 0.826887,-0.1384 1.14514,0.2048 0.137872,0.1486 2.135918,3.5732 2.473667,4.2397 0.290631,0.5735 0.148477,1.1013 -0.366724,1.3616 -0.232734,0.1176 -0.333307,0.1285 -1.184442,0.1285 l -0.930111,0 0,-0.7111 0,-0.711 0.356898,-0.017 c 0.308411,-0.015 0.359154,-0.033 0.3735,-0.1331 0.02511,-0.1753 -1.263565,-2.3923 -1.403135,-2.4139 -0.09093,-0.014 -0.241541,0.2064 -0.810723,1.1858 -0.78854,1.357 -0.79139,1.3726 -0.25121,1.3726 l 0.30708,0 0,0.7138 0,0.7138 -0.87083,-0.01 c -0.47896,0 -0.96077,-0.03 -1.0707,-0.062 z m 7.690946,-0.8707 c -0.119855,-0.044 -0.268399,-0.1253 -0.330098,-0.1811 -0.113886,-0.1032 -1.048273,-1.6755 -1.013003,-1.7047 0.08512,-0.071 1.132193,-0.6597 1.16991,-0.6584 0.02667,9e-4 0.119269,0.1185 0.205778,0.2609 0.25871,0.4261 0.305515,0.385 1.0776254,-0.9476 0.372933,-0.6438 0.67806,-1.1999 0.67806,-1.2359 0,-0.12 -0.171119,-0.1349 -1.5482634,-0.1349 -1.572597,0 -1.548598,-0.01 -1.289223,0.4776 0.08368,0.1568 0.14605,0.2888 0.138602,0.2931 -0.938775,0.5404 -1.148038,0.6569 -1.179698,0.6569 -0.02108,0 -0.249138,-0.3666 -0.506785,-0.8146 -0.418379,-0.7275 -0.468449,-0.8456 -0.468449,-1.105 0,-0.3212 0.136986,-0.5792 0.418189,-0.7875 0.158343,-0.1174 0.210364,-0.1195 2.91229,-0.1195 2.5679574,0 2.7624694,0.01 2.9223784,0.1048 0.360766,0.2206 0.528102,0.632 0.420755,1.0345 -0.05385,0.2019 -2.309571,4.1849 -2.574704,4.5462 -0.231194,0.3151 -0.6684764,0.4484 -1.0333644,0.3152 z"/></svg>'
                     + '</button> '
                     + '<input name="payment_source_token_afterpay" id="payment_source_token_afterpay" type="hidden" />';
@@ -146,6 +162,7 @@ function updatePaydockPaymentInformation(order) {
                     + 'data-gateway-id="' + paydockCheckoutButtonZipMoneyPaymentInstrument.gatewayId + '" '
                     + 'data-public-key="' + paydockCheckoutButtonZipMoneyPaymentInstrument.publicKey + '" '
                     + (paydockCheckoutButtonZipMoneyPaymentInstrument.meta ? 'data-meta=\'' + JSON.stringify(paydockCheckoutButtonZipMoneyPaymentInstrument.meta) + '\' ' : '')
+                    + 'data-env="' + paydockCheckoutButtonZipMoneyPaymentInstrument.env + '" '
                     + '><svg viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">'
                     + '<path d="M1.57138 21.8984L2.18053 26.8613H23.5065L22.8087 21.1777H12.8655L12.7786 20.4734L21.937 14.0736L21.3251 9.10059H0L0.697879 14.7842H10.6575L10.7453 15.4949L1.57138 21.8984Z" fill="#1A0826"></path>'
                     + '<path d="M23.8027 9.10059L25.9842 26.8613H47.3267L45.1452 9.10059H23.8027Z" fill="#AA8FFF"></path>'
@@ -165,6 +182,7 @@ function updatePaydockPaymentInformation(order) {
                       + 'id="paydock3DSCanvasWidget" '
                       + 'class="mt-2 mb-4" '
                       + 'data-canvas-token="' + paydockPaymentInstrument.canvasToken + '" '
+                      + 'data-env="' + paydockPaymentInstrument.env + '" '
                       + '></div>';
                   
                   $('.btn.place-order').addClass('d-none');
@@ -188,6 +206,7 @@ function updatePaydockPaymentInformation(order) {
                     + 'id="paydock3DSCanvasWidget" '
                     + 'class="mt-2 mb-4" '
                     + 'data-canvas-token="' + paydockPaymentInstrument.canvasToken + '" '
+                    + 'data-env="' + paydockPaymentInstrument.env + '" '
                     + '></div>';
 
                     $('.btn.place-order').removeClass('d-none');

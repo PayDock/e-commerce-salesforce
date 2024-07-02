@@ -6,6 +6,12 @@
 
 <li class="nav-item" data-method-id="${paymentOption.ID}">
     <a class="nav-link paydock-wallet-buttons-paypal-tab ${isActive ? 'active' : ''}" data-toggle="tab" href="#paydock-wallet-buttons-paypal-content" role="tab">
+        <img class="paydock-wallet-buttons-paypal-option"
+            src="${paymentOption.image || URLUtils.staticURL('/images/PayPal.png')}"
+            height="13"
+            alt="${paymentOption.name}"
+            title="${paymentOption.name}"
+        />
         <label>
             ${paymentOption.name}
         </label>

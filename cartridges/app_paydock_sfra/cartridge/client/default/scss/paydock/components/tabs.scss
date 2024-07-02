@@ -27,6 +27,11 @@
     text-align: left;
 }
 
+.payment-options .nav-item .paydock-tab {
+    display: flex;
+    justify-content: space-between;
+}
+
 .payment-options .nav-item .nav-link {
     border: 1px solid $black;
     margin: .625rem 0;
@@ -50,6 +55,26 @@
 
 .payment-options .tab-pane.active {
     border-top: none;
+}
+
+.credit-card-option,
+.paydock-checkout-button-zipmoney-option,
+.paydock-wallet-buttons-afterpay-option,
+.paydock-wallet-buttons-apple-pay-option,
+.paydock-wallet-buttons-google-pay-option,
+.paydock-wallet-buttons-paypal-option,
+.paydock-option-logo {
+    padding-right: 20px;
+    vertical-align: sub;
+}
+
+.paydock-wallet-buttons-paypal-option {
+    vertical-align: baseline;
+}
+
+.paydock-checkout-button-afterpay-option {
+    padding-right: 11px;
+    vertical-align: middle;
 }
 
 @include media-breakpoint-up(lg) {
