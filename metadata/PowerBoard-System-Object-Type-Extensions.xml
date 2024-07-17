@@ -281,6 +281,10 @@
                         <value>sandbox</value>
                     </value-definition>
                     <value-definition>
+                        <display xml:lang="x-default">Staging</display>
+                        <value>staging</value>
+                    </value-definition>
+                    <value-definition>
                         <display xml:lang="x-default">Production</display>
                         <value>production</value>
                     </value-definition>

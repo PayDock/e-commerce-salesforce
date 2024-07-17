@@ -43,7 +43,13 @@ function collectParams(collector, payload, prefix) {
  */
 function getPowerboardServiceDefinition() {
 	return LocalServiceRegistry.createService(
-		preferences.powerboard.powerboardEnvironment === 'production' ? 'powerboard.production.http.service' : 'powerboard.sandbox.http.service', {
+		preferences.powerboard.powerboardEnvironment === 'production' ?
+			'powerboard.production.http.service' :
+			(
+				preferences.powerboard.powerboardEnvironment === 'staging' ?
+				'powerboard.staging.http.service' :
+				'powerboard.sandbox.http.service'
+			), {
 		createRequest: function (svc, requestObject) {
 			const apiSecretKey = preferences.powerboard.powerboardPrivateAPIKey;
 

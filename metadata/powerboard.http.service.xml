@@ -6,6 +6,12 @@
         <password encrypted="true" encryption-type="common.export">9MDUUOEbzpncM7O/Nmpqarn3SeFELk0cjrEPEdKyfr4=</password>
     </service-credential>
 
+    <service-credential service-credential-id="powerboard.staging.http.service">
+        <url>https://api.staging.powerboard.commbank.com.au</url>
+        <user-id/>
+        <password encrypted="true" encryption-type="common.export">9MDUUOEbzpncM7O/Nmpqarn3SeFELk0cjrEPEdKyfr4=</password>
+    </service-credential>
+
     <service-credential service-credential-id="powerboard.sandbox.http.service">
         <url>https://api.preproduction.powerboard.commbank.com.au</url>
         <user-id/>
@@ -31,6 +37,17 @@
         <mock-mode-enabled>false</mock-mode-enabled>
         <profile-id>powerboard.http.service</profile-id>
         <credential-id>powerboard.production.http.service</credential-id>
+    </service>
+
+    <service service-id="powerboard.staging.http.service">
+        <service-type>HTTP</service-type>
+        <enabled>true</enabled>
+        <log-prefix>POWERBOARD</log-prefix>
+        <comm-log-enabled>false</comm-log-enabled>
+        <force-prd-enabled>true</force-prd-enabled>
+        <mock-mode-enabled>false</mock-mode-enabled>
+        <profile-id>powerboard.http.service</profile-id>
+        <credential-id>powerboard.staging.http.service</credential-id>
     </service>
 
     <service service-id="powerboard.sandbox.http.service">

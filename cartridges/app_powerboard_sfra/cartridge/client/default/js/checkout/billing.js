@@ -13,7 +13,7 @@ function powerboardWidgetInit() {
     var powerboardReferenceId = document.getElementById("powerboardWidget").dataset.referenceId;
     var powerboardWidgetStyles = document.getElementById("powerboardWidget").dataset.styles;
     var powerboardWidgetEnv = document.getElementById("powerboardWidget").dataset.env;
-    powerboardWidgetEnv = ['sandbox', 'production'].indexOf(powerboardWidgetEnv) !== -1 ?
+    powerboardWidgetEnv = ['sandbox', 'staging', 'production'].indexOf(powerboardWidgetEnv) !== -1 ?
         powerboardWidgetEnv :
         'sandbox';
     var cartShemasString = document.getElementById("powerboardWidget").dataset.cartScheme;
@@ -27,6 +27,10 @@ function powerboardWidgetInit() {
         if (powerboardWidgetEnv === 'production') {
             powerboardWidget.setEnv('production_cba');
             browserDetailsResp = new cba.Api(powerboardPublicKey).setEnv('production_cba').getBrowserDetails();
+        }
+        else if (powerboardWidgetEnv === 'staging') {
+            powerboardWidget.setEnv('staging_cba');
+            browserDetailsResp = new cba.Api(powerboardPublicKey).setEnv('staging_cba').getBrowserDetails();
         }
         else {
             powerboardWidget.setEnv('preproduction_cba');
